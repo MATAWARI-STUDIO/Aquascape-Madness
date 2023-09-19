@@ -1,0 +1,48 @@
+// WaterPhysics.compute
+#pragma kernel CSMain
+
+// Texture to hold the water height data
+RWTexture2D<float> Result;
+
+// Time step for simulation
+float deltaTime;
+
+// Spring constant
+float k = 0.1;
+
+// Damping constant
+float d = 0.04;
+
+// Mass of each particle
+float mass = 1.0;
+
+// Previous heights
+Texture2D<float> PrevResult;
+
+[numthreads(16, 16, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+    // Get the current height of this particle
+    float currentHeight = Result[id.xy];
+
+    // Get the previous height of this particle
+    float prevHeight = PrevResult[id.xy];
+
+    // Calculate forces based on neighboring particles
+    float force = 0.0;
+    force += (Result[id.xy + uint2(1, 0)] - currentHeight) * k;
+    force += (Result[id.xy + uint2(-1, 0)] - currentHeight) * k;
+    force += (Result[id.xy + uint2(0, 1)] - currentHeight) * k;
+    force += (Result[id.xy + uint2(0, -1)] - currentHeight) * k;
+
+    // Calculate acceleration
+    float acceleration = force / mass;
+
+    // Calculate damping
+    float damping = d * (currentHeight - prevHeight) / deltaTime;
+
+    // Calculate new height
+    float newHeight = currentHeight + deltaTime * (currentHeight - prevHeight) + deltaTime * deltaTime * (acceleration - damping);
+
+    // Update the height in the Result texture
+    Result[id.xy] = newHeight;
+}

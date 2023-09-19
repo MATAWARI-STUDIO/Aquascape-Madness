@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: cbd826e6d63a9624aa7f8a232093acad
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Helvetica Neue UltraLight
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 68520f0f57a8aae4485259ded568e3b4, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

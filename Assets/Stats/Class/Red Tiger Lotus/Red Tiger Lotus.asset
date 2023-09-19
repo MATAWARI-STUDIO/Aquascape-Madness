@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1aff28337d24cf7b76e581bc4334c37, type: 3}
+  m_Name: Red Tiger Lotus
+  m_EditorClassIdentifier: 
+  m_Class:
+    m_Property:
+      rid: 868444396114411583
+  m_Description:
+    m_Property:
+      rid: 868444396114411584
+  m_Sprite:
+    m_Property:
+      rid: 868444396114411585
+  m_Color:
+    m_Property:
+      rid: 868444396114411586
+  m_Attributes:
+    m_Attributes:
+    - rid: 868444400562733084
+    - rid: 868444400562733085
+    - rid: 868444400562733086
+    - rid: 868444400562733087
+    - rid: 868444400562733088
+    - rid: 868444400562733089
+    - rid: 868444400562733090
+    - rid: 868444400562733091
+    - rid: 868444400562733104
+  m_Stats:
+    m_Stats:
+    - rid: 868444400562733105
+  references:
+    version: 2
+    RefIds:
+    - rid: 868444396114411583
+      type: {class: GetStringSelfName, ns: GameCreator.Runtime.Common, asm: GameCreator.Runtime.Core}
+    - rid: 868444396114411584
+      type: {class: GetStringTextArea, ns: GameCreator.Runtime.Common, asm: GameCreator.Runtime.Core}
+      data:
+        m_Text:
+          m_Text: 
+    - rid: 868444396114411585
+      type: {class: GetSpriteNone, ns: GameCreator.Runtime.Common, asm: GameCreator.Runtime.Core}
+    - rid: 868444396114411586
+      type: {class: GetColorColorsWhite, ns: GameCreator.Runtime.Common, asm: GameCreator.Runtime.Core}
+    - rid: 868444400562733084
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 1
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 7bcf5df7e1a7fa648bb59310c3835fcf, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733085
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 6c7929cb35e11a341b1dde7c920942e5, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733086
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 0a96e25c39b8a5346a670b08cdbde2ff, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733087
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: ad07fe121b6fb1940936d79fb241b55b, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733088
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: d6e2cda33b3fe864991968d02c44d20c, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733089
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 8e32cb59b16ad6249b5805f43158925f, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733090
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 8e260c4cebeae1941be3dd8ad2f81c75, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733091
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 5ccc9f3b534bea84283607c15420c849, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733104
+      type: {class: AttributeItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 0
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Attribute: {fileID: 11400000, guid: 4775652045c15914d81ee3983b53acf0, type: 2}
+        m_ChangeStartPercent: 0
+        m_StartPercent: 1
+    - rid: 868444400562733105
+      type: {class: StatItem, ns: GameCreator.Runtime.Stats, asm: GameCreator.Runtime.Stats}
+      data:
+        m_IsExpanded: 1
+        m_Breakpoint: 0
+        m_IsEnabled: 1
+        m_IsHidden: 0
+        m_Stat: {fileID: 0}
+        m_ChangeBase: 0
+        m_Base: 100
+        m_ChangeFormula: 0
+        m_Formula: {fileID: 0}

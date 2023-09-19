@@ -1,0 +1,383 @@
+{
+  "substrates": [
+    {
+      "id": "gravel",
+      "name": "Gravel",
+      "type": "Inert",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 5,
+      "nutrient_holding_capacity": 5,
+      "particle_size_mm": [2.0, 5.0],
+      "color": "Mixed",
+      "price_usd": 10.0,
+      "description": "Gravel is a popular choice for freshwater aquariums. It is typically inert and does not affect water chemistry.",
+      "suitability_for_plants": "Low",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": -0.1,
+          "effectOnNutrientUptake": -0.1
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": 0.0,
+          "effectOnNitrite": 0.0,
+          "effectOnNitrate": 0.0
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "sand",
+      "name": "Sand",
+      "type": "Inert",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 0,
+      "nutrient_holding_capacity": 0,
+      "particle_size_mm": [0.1, 0.5],
+      "color": "White",
+      "price_usd": 15.0,
+      "description": "Sand is fine-grained and offers a natural look but is not ideal for plants that need to root.",
+      "suitability_for_plants": "Low",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": -0.2,
+          "effectOnNutrientUptake": -0.2
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": 0.0,
+          "effectOnNitrite": 0.0,
+          "effectOnNitrate": 0.0
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "aquasoil",
+      "name": "Aqua Soil",
+      "type": "Active",
+      "pH_effect": -0.5,
+      "cation_exchange_capacity": 25,
+      "nutrient_holding_capacity": 15,
+      "particle_size_mm": [1.0, 3.0],
+      "color": "Brown",
+      "price_usd": 25.0,
+      "description": "Aqua Soil is designed for planted tanks and provides essential nutrients. It can also lower pH.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.2,
+          "effectOnNutrientUptake": 0.2
+        },
+        "water": {
+          "effectOnpH": -0.5,
+          "effectOnAmmonia": -0.1,
+          "effectOnNitrite": -0.1,
+          "effectOnNitrate": -0.1
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "fluorite",
+      "name": "Fluorite",
+      "type": "Active",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 20,
+      "nutrient_holding_capacity": 20,
+      "particle_size_mm": [2.0, 4.0],
+      "color": "Red",
+      "price_usd": 30.0,
+      "description": "Fluorite is a porous clay substrate for planted tanks. It provides essential nutrients and is particularly good for root-feeding plants.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.3,
+          "effectOnNutrientUptake": 0.3
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": -0.1,
+          "effectOnNitrite": -0.1,
+          "effectOnNitrate": -0.1
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "eco_complete",
+      "name": "Eco-Complete",
+      "type": "Active",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 30,
+      "nutrient_holding_capacity": 25,
+      "particle_size_mm": [1.0, 5.0],
+      "color": "Black",
+      "price_usd": 35.0,
+      "description": "Eco-Complete is designed for lush plant growth. It has high CEC and excellent nutrient-holding properties.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.4,
+          "effectOnNutrientUptake": 0.4
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": -0.2,
+          "effectOnNitrite": -0.2,
+          "effectOnNitrate": -0.2
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "laterite",
+      "name": "Laterite",
+      "type": "Active",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 15,
+      "nutrient_holding_capacity": 10,
+      "particle_size_mm": [1.0, 3.0],
+      "color": "Red-Brown",
+      "price_usd": 20.0,
+      "description": "Laterite is rich in iron and is often used as a bottom layer under another substrate for planted tanks.",
+      "suitability_for_plants": "Medium",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.1,
+          "effectOnNutrientUptake": 0.1
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": -0.1,
+          "effectOnNitrite": -0.1,
+          "effectOnNitrate": -0.1
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "pebble",
+      "name": "Pebble",
+      "type": "Inert",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 0,
+      "nutrient_holding_capacity": 0,
+      "particle_size_mm": [5.0, 10.0],
+      "color": "Mixed",
+      "price_usd": 15.0,
+      "description": "Pebbles are larger and are often used for decorative purposes. Not ideal for plants.",
+      "suitability_for_plants": "Low",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": -0.3,
+          "effectOnNutrientUptake": -0.3
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": 0.0,
+          "effectOnNitrite": 0.0,
+          "effectOnNitrate": 0.0
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "coral_sand",
+      "name": "Coral Sand",
+      "type": "Inert",
+      "pH_effect": 0.5,
+      "cation_exchange_capacity": 0,
+      "nutrient_holding_capacity": 0,
+      "particle_size_mm": [0.5, 2.0],
+      "color": "White",
+      "price_usd": 20.0,
+      "description": "Coral Sand is made from crushed coral and can raise the pH. Suitable for marine or rift lake setups.",
+      "suitability_for_plants": "Low",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": -0.4,
+          "effectOnNutrientUptake": -0.4
+        },
+        "water": {
+          "effectOnpH": 0.5,
+          "effectOnAmmonia": 0.0,
+          "effectOnNitrite": 0.0,
+          "effectOnNitrate": 0.0
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "potting_soil",
+      "name": "Potting Soil",
+      "type": "Active",
+      "pH_effect": -0.2,
+      "cation_exchange_capacity": 40,
+      "nutrient_holding_capacity": 35,
+      "particle_size_mm": [0.5, 2.0],
+      "color": "Dark Brown",
+      "price_usd": 10.0,
+      "description": "Potting Soil is an organic soil and is usually used capped with another substrate in planted tanks.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.5,
+          "effectOnNutrientUptake": 0.5
+        },
+        "water": {
+          "effectOnpH": -0.2,
+          "effectOnAmmonia": -0.3,
+          "effectOnNitrite": -0.3,
+          "effectOnNitrate": -0.3
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "onyx_sand",
+      "name": "Onyx Sand",
+      "type": "Inert",
+      "pH_effect": 0.2,
+      "cation_exchange_capacity": 10,
+      "nutrient_holding_capacity": 5,
+      "particle_size_mm": [0.4, 1.0],
+      "color": "Black",
+      "price_usd": 25.0,
+      "description": "Onyx Sand has a slight buffering capacity. It provides minor nutrients and is good for planted tanks.",
+      "suitability_for_plants": "Medium",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.1,
+          "effectOnNutrientUptake": 0.1
+        },
+        "water": {
+          "effectOnpH": 0.2,
+          "effectOnAmmonia": -0.1,
+          "effectOnNitrite": -0.1,
+          "effectOnNitrate": -0.1
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "akadama",
+      "name": "Akadama",
+      "type": "Active",
+      "pH_effect": -0.3,
+      "cation_exchange_capacity": 30,
+      "nutrient_holding_capacity": 20,
+      "particle_size_mm": [1.0, 4.0],
+      "color": "Brown",
+      "price_usd": 40.0,
+      "description": "Akadama is a type of clay soil used in aquascaping. It is excellent for plant growth and has a high CEC.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.5,
+          "effectOnNutrientUptake": 0.5
+        },
+        "water": {
+          "effectOnpH": -0.3,
+          "effectOnAmmonia": -0.2,
+          "effectOnNitrite": -0.2,
+          "effectOnNitrate": -0.2
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "turface",
+      "name": "Turface",
+      "type": "Active",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 35,
+      "nutrient_holding_capacity": 30,
+      "particle_size_mm": [1.0, 3.0],
+      "color": "Tan",
+      "price_usd": 20.0,
+      "description": "Turface is used for high CEC and is good for plant growth. It is also affordable.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.4,
+          "effectOnNutrientUptake": 0.4
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": -0.2,
+          "effectOnNitrite": -0.2,
+          "effectOnNitrate": -0.2
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "perlite",
+      "name": "Perlite",
+      "type": "Inert",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 0,
+      "nutrient_holding_capacity": 0,
+      "particle_size_mm": [1.0, 4.0],
+      "color": "White",
+      "price_usd": 15.0,
+      "description": "Perlite is often mixed with other substrates to improve drainage. Not suitable as a standalone substrate.",
+      "suitability_for_plants": "Low",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": -0.4,
+          "effectOnNutrientUptake": -0.4
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": 0.0,
+          "effectOnNitrite": 0.0,
+          "effectOnNitrate": 0.0
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    },
+    {
+      "id": "vermiculite",
+      "name": "Vermiculite",
+      "type": "Active",
+      "pH_effect": 0.0,
+      "cation_exchange_capacity": 50,
+      "nutrient_holding_capacity": 50,
+      "particle_size_mm": [0.5, 2.0],
+      "color": "Golden",
+      "price_usd": 15.0,
+      "description": "Vermiculite is great for water retention and is often mixed with other substrates for planted aquariums.",
+      "suitability_for_plants": "High",
+      "interactions": {
+        "plants": {
+          "effectOnGrowthRate": 0.3,
+          "effectOnNutrientUptake": 0.3
+        },
+        "water": {
+          "effectOnpH": 0.0,
+          "effectOnAmmonia": -0.3,
+          "effectOnNitrite": -0.3,
+          "effectOnNitrate": -0.3
+        }
+      },
+      "potassium_ppm": [0.0, 0.0],
+      "phosphorus_ppm": [0.0, 0.0]
+    }
+  ]
+}
+

@@ -1,0 +1,82 @@
+{
+  "fishes": [
+    {
+      "name": "Siamese Algae Eater",
+      "type": "Algae Eater",
+      "pH_tolerance": [6.0, 8.0],
+      "ammonia_tolerance_ppm": [0.0, 0.25],
+      "nitrite_tolerance_ppm": [0.0, 0.1],
+      "nitrate_tolerance_ppm": [0.0, 40.0],
+      "o2_production_mgphg": [2.0, 4.0],
+      "co2_production_ppm": [0.0, 2.0],
+      "carbonate_hardness_Tolerance": [2, 20],
+      "general_hardness_Tolerance": [2, 25],
+      "temperature_range_celsius": [23, 28],
+      "interaction_with_plant": {
+        "effectOnpH": -0.1,
+        "effectOnAmmonia": -0.05,
+        "effectOnNitrite": -0.02,
+        "effectOnNitrate": -0.1,
+        "effectOnCO2Production": 0.0
+      },
+      "interaction_with_water": {
+        "effectOnpH": 0.05,
+        "effectOnAmmonia": 0.02,
+        "effectOnNitrite": 0.05,
+        "effectOnNitrate": 0.1,
+        "effectOnCO2Production": 0.1
+      },
+      "isHerbivorous": true,
+      "herbivoreFoodConsumptionRate": 0.05,
+      "herbivoreFoodAmount": 0.1,
+      "totalPlantBiomass": 0.5,
+      "hunger": 0.0,
+      "predatorFoodAmount": 0.2,
+      "price_usd": 5,
+      "description": "Siamese Algae Eater is a popular freshwater fish known for its ability to consume algae in aquariums. It has a peaceful temperament and can be a great addition to community tanks...",
+      "health": 100,
+      "stress": 0,
+      "effectOnNitrate": 0.0,
+      "temperature_tolerance_celsius": [20, 30]
+    },
+    {
+      "name": "Pearl Gourami",
+      "type": "Gourami",
+      "pH_tolerance": [6.0, 7.5],
+      "ammonia_tolerance_ppm": [0.0, 0.25],
+      "nitrite_tolerance_ppm": [0.0, 0.1],
+      "nitrate_tolerance_ppm": [0.0, 20.0],
+      "o2_production_mgphg": [1.0, 2.0],
+      "co2_production_ppm": [0.0, 2.0],
+      "carbonate_hardness_Tolerance": [2, 10],
+      "general_hardness_Tolerance": [2, 15],
+      "temperature_range_celsius": [24, 30],
+      "interaction_with_plant": {
+        "effectOnpH": -0.05,
+        "effectOnAmmonia": -0.05,
+        "effectOnNitrite": -0.02,
+        "effectOnNitrate": -0.05,
+        "effectOnCO2Production": 0.0
+      },
+      "interaction_with_water": {
+        "effectOnpH": 0.05,
+        "effectOnAmmonia": 0.02,
+        "effectOnNitrite": 0.05,
+        "effectOnNitrate": 0.05,
+        "effectOnCO2Production": 0.05
+      },
+      "isHerbivorous": false,
+      "herbivoreFoodConsumptionRate": 0.0,
+      "herbivoreFoodAmount": 0.0,
+      "totalPlantBiomass": 0.1,
+      "hunger": 0.0,
+      "predatorFoodAmount": 0.2,
+      "price_usd": 8,
+      "description": "Pearl Gourami is a popular freshwater fish known for its striking appearance and peaceful behavior...",
+      "health": 100,
+      "stress": 0,
+      "effectOnNitrate": 0.0,
+      "temperature_tolerance_celsius": [22, 32]
+    }
+  ]
+}

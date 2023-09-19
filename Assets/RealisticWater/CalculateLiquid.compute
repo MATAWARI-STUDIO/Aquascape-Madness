@@ -1,0 +1,107 @@
+﻿#pragma kernel Impulse
+#pragma kernel LiquidCompute
+#pragma kernel RecalculateNormals
+#pragma kernel RecalculateNormalsInverted
+#pragma kernel ApplyVelocity
+
+RWStructuredBuffer<float3> positions;
+RWStructuredBuffer<float3> normals;
+RWStructuredBuffer<float3> velocities;
+int gridSize;
+float idealDistance;
+float invDamp;
+float elasticity;
+
+
+int impulseCountdown;
+int impulseX;
+int impulseZ;
+int impulseRadius;
+float4 impulseVector;
+
+[numthreads(32,1,32)]
+void Impulse (uint3 id : SV_DispatchThreadID)
+{
+    if (impulseCountdown==0) return;
+    if (id.x>=gridSize-2 || id.z>=gridSize-2) return;
+    int x=id.x+1;
+    int z=id.z+1;
+    int i=x+gridSize*z;
+    x=x-impulseX;
+    z=z-impulseZ;
+    float d=sqrt(x*x+z*z);
+    if (d>impulseRadius) return;
+    d=d/impulseRadius;
+    d=cos(d*1.570796326794897f); //PI/2
+    velocities[i]+=impulseVector*d;
+
+}
+
+float3 separationForce(float3 p1,float3 p2, float multiplier) {
+    float3 diff=p1-p2;
+    float distance=length(diff);
+    float force=(idealDistance-distance)/(distance*multiplier);
+    return diff*force;
+}
+
+[numthreads(32,1,32)]
+void LiquidCompute (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x>=gridSize-2 || id.z>=gridSize-2) return;
+    int i=(id.x+1)+gridSize*(id.z+1);
+
+    float3 p0=positions[i];
+    float3 p1=positions[i-1];
+    float3 p2=positions[i+1];
+    float3 p3=positions[i-gridSize];
+    float3 p4=positions[i+gridSize];
+    
+    float3 p5=positions[i-1-gridSize];
+    float3 p6=positions[i+1-gridSize];
+    float3 p7=positions[i-1+gridSize];
+    float3 p8=positions[i+1+gridSize];
+    const float root2=0.707f;
+    float3 diff=separationForce(p0,p1,1)+separationForce(p0,p2,1)+separationForce(p0,p3,1)+separationForce(p0,p4,1);
+    diff+=separationForce(p0,p5,root2)+separationForce(p0,p6,root2)+separationForce(p0,p7,root2)+separationForce(p0,p8,root2);
+    velocities[i]=(velocities[i]+diff*elasticity)*invDamp;
+}
+
+[numthreads(32,1,32)]
+void ApplyVelocity (uint3 id : SV_DispatchThreadID)
+{   int i=id.x+gridSize*id.z;
+    positions[i]+=velocities[i];
+}
+
+[numthreads(32,1,32)]
+void RecalculateNormals (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x>=gridSize-2 || id.z>=gridSize-2) return;
+    int i=(id.x+1)+gridSize*(id.z+1);
+
+    float3 p=positions[i];
+    float3 edge1=positions[i-1]-p;
+    float3 edge2=p-positions[i-gridSize];
+    float3 normal=cross(edge1,edge2);
+    edge1=positions[i+1]-p;
+    edge2=p-positions[i+gridSize];
+    normal+=cross(edge1,edge2);
+    normals[i]=normalize(normal);
+}
+
+[numthreads(32,1,32)]
+void RecalculateNormalsInverted (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x>=gridSize-2 || id.z>=gridSize-2) return;
+    int i=(id.x+1)+gridSize*(id.z+1);
+
+    float3 p=positions[i];
+    float3 edge1=positions[i-1]-p;
+    float3 edge2=p-positions[i-gridSize];
+    float3 normal=cross(edge1,edge2);
+    edge1=positions[i+1]-p;
+    edge2=p-positions[i+gridSize];
+    normal+=cross(edge1,edge2);
+    normals[i]=-normalize(normal);
+}
+
+

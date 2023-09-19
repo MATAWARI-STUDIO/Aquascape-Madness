@@ -1,0 +1,42 @@
+{
+    "algae": [
+        {
+            "name": "Green Algae",
+            "description": "Green algae are photosynthetic organisms that contribute to the aquarium ecosystem...",
+            "health": 100.0,
+            "pH_tolerance": [6.0, 8.0],
+            "nitrate_tolerance_ppm": [0.0, 50.0],
+            "growth_rate": 0.5,
+            "oxygen_production_rate": 10.0,
+            "interaction_with_fish": {
+                "effectOnpH": -0.1,
+                "effectOnNitrate": -5.0,
+                "effectOnOxygenProduction": 2.0
+            },
+            "interaction_with_water": {
+                "effectOnpH": -0.05,
+                "effectOnNitrate": -2.0,
+                "effectOnOxygenProduction": 1.0
+            }
+        },
+        {
+            "name": "Brown Algae",
+            "description": "Brown algae, also known as diatoms, are a type of microalgae that can thrive in various aquatic environments...",
+            "health": 80.0,
+            "pH_tolerance": [7.0, 9.0],
+            "nitrate_tolerance_ppm": [0.0, 30.0],
+            "growth_rate": 0.3,
+            "oxygen_production_rate": 5.0,
+            "interaction_with_fish": {
+                "effectOnpH": -0.05,
+                "effectOnNitrate": -3.0,
+                "effectOnOxygenProduction": 1.0
+            },
+            "interaction_with_water": {
+                "effectOnpH": -0.03,
+                "effectOnNitrate": -1.5,
+                "effectOnOxygenProduction": 0.5
+            }
+        }
+    ]
+}

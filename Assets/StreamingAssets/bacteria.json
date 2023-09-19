@@ -1,0 +1,38 @@
+{
+    "bacteria": [
+        {
+            "name": "Nitrobacter",
+            "description": "Nitrobacter bacteria play a crucial role in the nitrogen cycle by converting ammonia to nitrite and then nitrate...",
+            "price_usd": 10,
+            "health": 100.0,
+            "pH_tolerance": [6.5, 8.5],
+            "ammonia_tolerance_ppm": [0.0, 5.0],
+            "growth_rate": 0.2,
+            "interaction_with_fish": {
+                "effectOnpH": -0.05,
+                "effectOnAmmonia": -2.0
+            },
+            "interaction_with_water": {
+                "effectOnpH": -0.03,
+                "effectOnAmmonia": -1.0
+            }
+        },
+        {
+            "name": "Denitrificus",
+            "description": "Denitrificus bacteria contribute to the nitrogen cycle by converting nitrate into nitrogen gas, which is released into the atmosphere...",
+            "price_usd": 8,
+            "health": 90.0,
+            "pH_tolerance": [7.0, 8.5],
+            "ammonia_tolerance_ppm": [0.0, 10.0],
+            "growth_rate": 0.1,
+            "interaction_with_fish": {
+                "effectOnpH": -0.03,
+                "effectOnAmmonia": -1.5
+            },
+            "interaction_with_water": {
+                "effectOnpH": -0.02,
+                "effectOnAmmonia": -1.0
+            }
+        }
+    ]
+}

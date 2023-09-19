@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 88f3a91b741a34d479048ad4bb93d4a9
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - HelveticaNeueW01-66MediumIt
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 23c9aa9d1bbbc3c4ca3bd0a1b6931ef4, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

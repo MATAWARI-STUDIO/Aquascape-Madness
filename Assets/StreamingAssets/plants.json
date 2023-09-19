@@ -1,0 +1,82 @@
+{
+  "plants": [
+    {
+      "id": "red_tiger_lotus",
+      "name": "Red Tiger Lotus",
+      "type": "Aquatic",
+      "pH": [6.0, 7.5],
+      "ammonia_ppm": [0.05, 0.2],
+      "nitrite_ppm": [0.01, 0.1],
+      "nitrate_ppm": [0.1, 0.5],
+      "o2_production_mgphg": [1, 4],
+      "light_requirement": "High",
+      "light_intensity_lux": 5000,
+      "co2_needs_ppm": [10, 30],
+      "price_usd": 8,
+      "temperature_range_celsius": [22, 28],
+      "plantSize": 0.5,
+      "growthRate": 0.2,
+      "nutrientReleaseRate": 0.03,
+      "oxygenConsumptionRate": 0.1,
+      "lightSpectrum": "Full Spectrum",
+      "co2AbsorptionRate": 0.02,
+      "health": 100,
+      "stress": 0,
+      "interactions": {
+        "fish": {
+          "effectOnpH": -0.1,
+          "effectOnAmmonia": -0.05,
+          "effectOnNitrite": -0.03,
+          "effectOnNitrate": -0.02
+        }
+      },
+      "carbonateHardness_Tolerance": [4, 10],
+      "generalHardness_Tolerance": [4, 15],
+      "substrateType_Preference": "Rich",
+      "propagationMethod": "Rhizome",
+      "CO2Injection_Required": true,
+      "waterFlow_Tolerance": "Moderate",
+      "preferredTankPlacement": "Foreground",
+      "description": "Red Tiger Lotus is a stunning aquatic plant with red or pink leaves..."
+    },
+    {
+      "id": "christmas_moss",
+      "name": "Christmas Moss",
+      "type": "Aquatic",
+      "pH": [5.0, 8.0],
+      "ammonia_ppm": [0.05, 0.2],
+      "nitrite_ppm": [0.01, 0.2],
+      "nitrate_ppm": [5.0, 20.0],
+      "o2_production_mgphg": [1, 3],
+      "light_requirement": "Low",
+      "light_intensity_lux": 2000,
+      "co2_needs_ppm": [5, 40],
+      "price_usd": 6,
+      "temperature_range_celsius": [20, 28],
+      "plantSize": 0.02,
+      "growthRate": 0.1,
+      "nutrientReleaseRate": 0.01,
+      "oxygenConsumptionRate": 0.05,
+      "lightSpectrum": "Full Spectrum",
+      "co2AbsorptionRate": 0.03,
+      "health": 95,
+      "stress": 0,
+      "interactions": {
+        "fish": {
+          "effectOnpH": -0.03,
+          "effectOnAmmonia": -0.02,
+          "effectOnNitrite": -0.02,
+          "effectOnNitrate": -0.03
+        }
+      },
+      "carbonateHardness_Tolerance": [2, 20],
+      "generalHardness_Tolerance": [2, 25],
+      "substrateType_Preference": "Any",
+      "propagationMethod": "Fragmentation",
+      "CO2Injection_Required": true,
+      "waterFlow_Tolerance": "Moderate",
+      "preferredTankPlacement": "Foreground",
+      "description": "Christmas Moss is a popular aquatic moss known for its delicate and feathery appearance..."
+    }
+  ]
+}

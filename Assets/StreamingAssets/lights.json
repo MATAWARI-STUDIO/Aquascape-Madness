@@ -1,0 +1,40 @@
+{
+    "lights": [
+        {
+            "name": "LED Full Spectrum",
+            "type": "LED",
+            "light_intensity_lux": 8000,
+            "color_temperature_kelvin": 6500,
+            "intensity_adjustment_factor": 1.0,
+            "price_usd": 50,
+            "description": "The LED Full Spectrum light provides a balanced light spectrum...",
+            "isOn": true,
+            "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0},
+            "intensity": 1.0
+        },
+        {
+            "name": "T5 HO Fluorescent",
+            "type": "Fluorescent",
+            "light_intensity_lux": 5000,
+            "color_temperature_kelvin": 6500,
+            "intensity_adjustment_factor": 0.8,
+            "price_usd": 30,
+            "description": "The T5 HO Fluorescent light delivers strong light output suitable for plant growth...",
+            "isOn": true,
+            "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0},
+            "intensity": 1.0
+        },
+        {
+            "name": "Metal Halide",
+            "type": "Metal Halide",
+            "light_intensity_lux": 10000,
+            "color_temperature_kelvin": 10000,
+            "intensity_adjustment_factor": 1.2,
+            "price_usd": 70,
+            "description": "The Metal Halide light simulates natural sunlight and enhances coral growth...",
+            "isOn": true,
+            "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0},
+            "intensity": 1.0
+        }
+    ]
+}

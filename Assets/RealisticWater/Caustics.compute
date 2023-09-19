@@ -1,0 +1,151 @@
+﻿
+#pragma kernel SetTextureFromMesh
+#pragma kernel RenderCaustics
+#pragma kernel BlurCaustics
+
+RWStructuredBuffer<float3> Normals;
+int NormalsSize;
+float Scaling;
+int TextureSize;
+RWTexture2D<float4> NormalTexture;
+RWTexture2D<float4> CausticsTexture;
+RWTexture2D<float4> BlurCausticsTexture;
+RWStructuredBuffer<int> CausticHits;
+
+[numthreads(8,8,1)]
+void SetTextureFromMesh (uint3 id : SV_DispatchThreadID)
+{
+    //lookup normal and bilinear interpolate assuming output texture is higher resolution that input mesh
+    //https://en.wikipedia.org/wiki/Bilinear_interpolation
+    float x=id.x*Scaling;
+    float y=id.y*Scaling;
+    int xint=(int)x;
+    int yint=(int)y;
+    int xint1=(int)x+1;
+    int yint1=(int)y+1;
+    xint1=xint1>=NormalsSize?NormalsSize-1:xint1;
+    yint1=yint1>=NormalsSize?NormalsSize-1:yint1;
+    float3 n0=Normals[xint+NormalsSize*yint];
+    float3 n1=Normals[xint1+NormalsSize*yint];
+    float3 n2=Normals[xint+NormalsSize*yint1];
+    float3 n3=Normals[xint1+NormalsSize*yint1];
+    float xf=frac(x);
+    float yf=frac(y);
+    float xf1=1-xf;
+    float yf1=1-yf;
+    float3 n=n0*xf1*yf1 + n1*xf*yf1 + n2*xf1*yf + n3*xf*yf;
+
+    //convert to normal map format
+    n=float3(0.5,0.5,0.5)+n*0.5;
+    NormalTexture[id.xy]=float4(n.xzy,0);
+
+    //NormalTexture[id.xy]=float4(n.xyz,0);
+    CausticsTexture[id.xy]=0;
+    CausticHits[id.x+TextureSize*id.y]=0;
+}
+
+
+float DepthOfLiquid;
+float RefractiveIndex;
+float4 LightDirection;
+float Brightness;
+float Gamma;
+//float CausticScaling;
+
+int dummy;
+
+[numthreads(8,8,1)]
+void RenderCaustics (uint3 id : SV_DispatchThreadID)
+{
+    //CausticsTexture[id.xy]=NormalTexture[id.xy]*0.5;
+    //for each point on NormalTexture work out where it will project too on CausticsTexture and accumulate
+
+    float3 n = normalize(NormalTexture[id.xy]);
+    float3 v = LightDirection.xyz;
+    float3 refractDir = refract(v, n, RefractiveIndex);
+    //if (length(refractDir)>0)
+     {
+        float x=(id.x+refractDir.x*DepthOfLiquid/refractDir.z);
+        //x=clamp(x,0,NormalsSize);
+        float y=(id.y+refractDir.y*DepthOfLiquid/refractDir.z);
+        //y=clamp(y,0,NormalsSize);
+        float4 light=float4(Brightness,Brightness,Brightness,Brightness);
+
+        //uint2 idx=uint2((uint)round(x),(uint)round(y));
+        //CausticsTexture[idx]+=light;
+
+        
+        //sub-pixel positioning
+        
+        float xf=frac(x);
+        float yf=frac(y);
+        float xf1=1-xf;
+        float yf1=1-yf;
+
+        uint ix=(uint)x;
+        uint iy=(uint)y;
+        if (x>1 && y>1 && x<TextureSize-1 && y<TextureSize-1) {
+            //CausticsTexture[uint2(ix,iy)]+=light;
+
+            InterlockedAdd(CausticHits[ix+TextureSize*iy],(int)(256*xf1*yf1));
+            InterlockedAdd(CausticHits[ix+1+TextureSize*iy],(int)(256*xf*yf1));
+            InterlockedAdd(CausticHits[ix+TextureSize*(iy+1)],(int)(256*xf1*yf));
+            InterlockedAdd(CausticHits[ix+1+TextureSize*(iy+1)],(int)(256*xf*yf));
+
+            //InterlockedAdd(CausticHits[ix+TextureSize*iy],(int)(256));
+        }
+
+
+
+
+        //CausticsTexture[uint2(ix+40,iy)]+=light;
+        //CausticsTexture[uint2(ix,iy+1)]+=light*xf*yf1;
+        //CausticsTexture[uint2(ix+1,iy+1)]+=light*xf1*yf1;
+        
+
+        /*
+        uint ix=(uint)x;
+        uint iy=(uint)y;
+        CausticsTexture[uint2(ix,iy)]+=light;
+        */
+    }
+    
+}
+
+//http://dev.theomader.com/gaussian-kernel-calculator/
+#define v1 0.294
+#define v2 0.124
+#define v3 0.052
+[numthreads(8,8,1)]
+void BlurCaustics (uint3 id : SV_DispatchThreadID)
+{
+
+    /*
+    float4 v=CausticsTexture[id.xy]*v1;
+    v+=CausticsTexture[uint2(id.x+1,id.y)]*v2;
+    v+=CausticsTexture[uint2(id.x-1,id.y)]*v2;
+    v+=CausticsTexture[uint2(id.x,id.y+1)]*v2;
+    v+=CausticsTexture[uint2(id.x,id.y-1)]*v2;
+    v+=CausticsTexture[uint2(id.x+1,id.y+1)]*v3;
+    v+=CausticsTexture[uint2(id.x-1,id.y+1)]*v3;
+    v+=CausticsTexture[uint2(id.x+1,id.y-1)]*v3;
+    v+=CausticsTexture[uint2(id.x-1,id.y-1)]*v3;
+    int isEdge=id.x==0 || id.y==0 || id.x>TextureSize-2 || id.y>TextureSize-2;
+    BlurCausticsTexture[id.xy]=isEdge?float4(0,0,0,0):v;
+    //BlurCausticsTexture[id.xy]=v;
+    */
+    int idx=id.x+TextureSize*id.y;
+    float v=v1*((float)CausticHits[idx]);
+    
+    v+=(id.x<TextureSize-1)?v2*((float)CausticHits[idx+1]):0;
+    v+=id.x>0?v2*((float)CausticHits[idx-1]):0;
+    v+=(id.y<TextureSize-1)?v2*((float)CausticHits[idx+TextureSize]):0;
+    v+=id.y>0?v2*((float)CausticHits[idx-TextureSize]):0;
+    
+    float k=v*Brightness;
+    int isEdge=id.x==0 || id.y==0 || id.x>TextureSize-2 || id.y>TextureSize-2;
+    k=pow(k,Gamma);
+    BlurCausticsTexture[id.xy]=isEdge?float4(0,0,0,0):float4(k,k,k,k);
+}
+
+
