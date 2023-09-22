@@ -22,9 +22,11 @@
       "effectiveness": 0.9,
       "filterMedia": "Bio Balls",
       "filterCapacity": 80,
+      "pHChangeRate": 0.01,
       "ammoniaChangeRate": -0.02,
       "nitriteChangeRate": -0.02,
-      "nitrateChangeRate": -0.02
+      "nitrateChangeRate": -0.02,
+      "oxygenChangeRate": 0.15
     },
     {
       "type": "Chemical",
@@ -34,74 +36,11 @@
       "effectiveness": 0.7,
       "filterMedia": "Activated Carbon",
       "filterCapacity": 120,
+      "pHChangeRate": 0.01,
       "ammoniaChangeRate": 0.01,
       "nitriteChangeRate": 0.01,
-      "nitrateChangeRate": -0.01
-    },
-    {
-      "type": "Canister",
-      "displayName": "Canister Filter",
-      "description": "This external filter provides high filtration efficiency and large filter media capacity.",
-      "price": 100,
-      "effectiveness": 0.95,
-      "filterMedia": "Ceramic Rings",
-      "filterCapacity": 200,
-      "pHChangeRate": 0.01,
-      "ammoniaChangeRate": -0.02,
-      "nitriteChangeRate": -0.01,
-      "nitrateChangeRate": -0.02,
-      "oxygenChangeRate": 0.2
-    },
-    {
-      "type": "HOB",
-      "displayName": "Hang-On-Back Filter",
-      "description": "This filter is attached to the back of the aquarium and is easy to install and maintain.",
-      "price": 15,
-      "effectiveness": 0.6,
-      "filterMedia": "Filter Pads",
-      "filterCapacity": 60,
-      "ammoniaChangeRate": 0.01,
-      "nitriteChangeRate": -0.01,
-      "nitrateChangeRate": -0.01
-    },
-    {
-      "type": "Sponge",
-      "displayName": "Sponge Filter",
-      "description": "This simple and economical filter provides both mechanical and biological filtration.",
-      "price": 10,
-      "effectiveness": 0.5,
-      "filterMedia": "Sponge",
-      "filterCapacity": 40,
-      "pHChangeRate": 0.01,
-      "ammoniaChangeRate": -0.01,
-      "nitriteChangeRate": -0.01,
-      "nitrateChangeRate": -0.01
-    },
-    {
-      "type": "Undergravel",
-      "displayName": "Undergravel Filter",
-      "description": "This filter is placed beneath the gravel substrate and provides biological filtration.",
-      "price": 15,
-      "effectiveness": 0.6,
-      "filterMedia": "Gravel",
-      "filterCapacity": 80,
-      "ammoniaChangeRate": -0.01,
-      "nitriteChangeRate": -0.02,
-      "nitrateChangeRate": -0.01
-    },
-    {
-      "type": "FluidizedBed",
-      "displayName": "Fluidized Bed Filter",
-      "description": "This filter uses a fluidized media to enhance biological filtration.",
-      "price": 50,
-      "effectiveness": 0.8,
-      "filterMedia": "Fluidized Media",
-      "filterCapacity": 150,
-      "pHChangeRate": 0.01,
-      "ammoniaChangeRate": -0.02,
-      "nitriteChangeRate": -0.02,
-      "nitrateChangeRate": -0.02,
-      "oxygenChangeRate": 0.15
+      "nitrateChangeRate": -0.01,
+      "oxygenChangeRate": 0.1
     }
   ]
 }

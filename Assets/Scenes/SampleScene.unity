@@ -25756,8 +25756,22 @@ MonoBehaviour:
   nitrateChangeRateText: {fileID: 1705896211}
   oxygenChangeRateText: {fileID: 1009517365}
   priceText: {fileID: 163460928}
+  powerDrawText: {fileID: 0}
+  flowRateText: {fileID: 0}
+  airflowRateText: {fileID: 0}
   jsonLoader: {fileID: 1364189694}
-  closeButton: {fileID: 1559278852}
+  powerButton: {fileID: 0}
+  serviceFilterButton: {fileID: 0}
+  nozzleLeftButton: {fileID: 0}
+  nozzleRightButton: {fileID: 0}
+  nozzleTiltLeftButton: {fileID: 0}
+  nozzleTiltRightButton: {fileID: 0}
+  venturiLeftButton: {fileID: 0}
+  venturiRightButton: {fileID: 0}
+  nozzleText: {fileID: 0}
+  nozzleTiltText: {fileID: 0}
+  venturiText: {fileID: 0}
+  waterQualityParameters: {fileID: 1896361308}
 --- !u!114 &365421968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54999,7 +55013,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 913409100}
-  m_LocalRotation: {x: 0.1869327, y: 0.112385534, z: -0.021532074, w: 0.9756854}
+  m_LocalRotation: {x: 0.18693268, y: 0.11238554, z: -0.021532077, w: 0.9756854}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -72742,7 +72756,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 8
+  m_Intensity: 47.746483
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -83678,24 +83692,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 492643f3967aab84da707f3f2cade709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filterName: Mechanical Filter
+  filterDataName: Mechanical Filter
   filterData:
-    filters:
-    - type: 
-      displayName: 
-      description: 
-      price: 0
-      effectiveness:
-        mechanical: 0
-        biological: 0
-        chemical: 0
-      filterMedia: 
-      filterCapacity: 0
-      pHChangeRate: 0
-      ammoniaChangeRate: 0
-      nitriteChangeRate: 0
-      nitrateChangeRate: 0
-      oxygenChangeRate: 0
+    type: 
+    displayName: 
+    description: 
+    price: 0
+    effectiveness: 0
+    filterMedia: 
+    filterCapacity: 0
+    pHChangeRate: 0
+    ammoniaChangeRate: 0
+    nitriteChangeRate: 0
+    nitrateChangeRate: 0
+    oxygenChangeRate: 0
   waterQualityParameters: {fileID: 1896361308}
 --- !u!65 &1514258104
 BoxCollider:
@@ -138698,7 +138708,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2650234582403667058}
-  m_LocalRotation: {x: 0.18693267, y: 0.112385556, z: -0.02153208, w: 0.9756854}
+  m_LocalRotation: {x: 0.18693265, y: 0.112385534, z: -0.021532072, w: 0.9756854}
   m_LocalPosition: {x: 61.11988, y: 3.534, z: -3.0455508}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

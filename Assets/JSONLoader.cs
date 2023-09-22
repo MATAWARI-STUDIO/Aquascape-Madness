@@ -13,7 +13,6 @@ public class JSONLoader : MonoBehaviour
     [SerializeField] private string bacteriaFileName = "bacteria.json";
     [SerializeField] private string substrateFileName = "substrates.json";
 
-
     public PlantData plantData;
     public FilterData filterData = new FilterData();
     public FishData fishData = new FishData();
@@ -138,7 +137,6 @@ public class JSONLoader : MonoBehaviour
         return null;
     }
 
-
     public Substrate GetSubstrateDataByName(string substrateName)
     {
         if (substrateData != null && substrateData.substrates != null)
@@ -154,8 +152,6 @@ public class JSONLoader : MonoBehaviour
 
     private void Start()
     {
-
-
         FishInfoPanel fishInfoPanel = FindObjectOfType<FishInfoPanel>();
         if (fishInfoPanel != null && fishInfoPanel.gameObject.activeSelf)
         {
@@ -188,6 +184,7 @@ public class JSONLoader : MonoBehaviour
         LoadAlgaeData();
         LoadBacteriaData();
     }
+
 
     public void LoadPlantData()
     {

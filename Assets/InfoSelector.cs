@@ -63,8 +63,8 @@ public class InfoSelector : MonoBehaviour
 
                 else if (filterBehavior != null)
                 {
-                    Debug.Log("Hit object is a filter: " + filterBehavior.filterName);
-                    Filter selectedFilter = jsonLoader.GetFilterByName(filterBehavior.filterName);
+                    Debug.Log("Hit object is a filter: " + filterBehavior.filterDataName);
+                    Filter selectedFilter = jsonLoader.GetFilterByName(filterBehavior.filterDataName);
                     filterInfoPanel.gameObject.SetActive(true);
                     filterInfoPanel.UpdateFilterInfo(selectedFilter);
                 }

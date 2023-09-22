@@ -1,5 +1,3 @@
-using UnityEngine;
-
 [System.Serializable]
 public class FilterData
 {
@@ -10,10 +8,10 @@ public class FilterData
 public class Filter
 {
     public string type;
-    public string displayName; // Updated from 'name'
+    public string displayName;
     public string description;
-    public float price; // Updated from 'price_usd'
-    public FilterEffectiveness effectiveness;
+    public float price;
+    public float effectiveness;
     public string filterMedia;
     public float filterCapacity;
     public float pHChangeRate;
@@ -21,12 +19,8 @@ public class Filter
     public float nitriteChangeRate;
     public float nitrateChangeRate;
     public float oxygenChangeRate;
+    public float powerDraw { get; set; }
+    public float flowRate { get; set; }
+    public float airflowRate { get; set; }
 }
 
-[System.Serializable]
-public class FilterEffectiveness
-{
-    public float mechanical;
-    public float biological;
-    public float chemical;
-}

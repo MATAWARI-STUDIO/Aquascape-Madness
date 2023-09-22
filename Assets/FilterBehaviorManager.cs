@@ -5,11 +5,12 @@ public class FilterBehaviorManager : MonoBehaviour
 {
     [SerializeField] private List<FilterBehavior> filters = new List<FilterBehavior>();
 
-    private WaterQualityParameters waterQualityParameters; // Updated reference
+    private WaterQualityParameters waterQualityParameters;
 
     private void Start()
     {
-        waterQualityParameters = FindObjectOfType<WaterQualityParameters>(); // Updated type
+        // Find and store a reference to WaterQualityParameters in the scene
+        waterQualityParameters = FindObjectOfType<WaterQualityParameters>();
         if (waterQualityParameters == null)
         {
             Debug.LogError("WaterQualityParameters not found in the scene. Make sure it exists.");
@@ -29,7 +30,7 @@ public class FilterBehaviorManager : MonoBehaviour
 
     public void AddFilter(FilterBehavior filter)
     {
-        if (filter != null)
+        if (filter != null && !filters.Contains(filter))
         {
             filters.Add(filter);
         }

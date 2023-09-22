@@ -2,31 +2,45 @@ using UnityEngine;
 
 public class FilterBehavior : MonoBehaviour
 {
-    public string filterName;
-    public JSONLoader.FilterData filterData; // Notice the explicit reference to JSONLoader.FilterData
-    public WaterQualityParameters waterQualityParameters; // Reference to WaterQualityParameters
+    public string filterDataName;
+    public Filter filterData; // Change the type to Filter
+    public WaterQualityParameters waterQualityParameters;
+    private JSONLoader jsonLoader;
+
 
     private void Start()
     {
-        JSONLoader jsonLoader = FindObjectOfType<JSONLoader>();
-        if (jsonLoader != null)
+        jsonLoader = GameObject.FindObjectOfType<JSONLoader>();
+        if (jsonLoader == null)
         {
-            filterData = jsonLoader.filterData;
-            if (filterData == null)
-            {
-                Debug.LogError("Filter data not found for: " + gameObject.name);
-            }
-        }
-        else
-        {
-            Debug.LogError("JSONLoader not found in the scene. Make sure it exists.");
+            Debug.LogError("No JSONLoader component found in the scene.");
+            enabled = false;
+            return;
         }
 
-        // Find and store a reference to WaterQualityParameters in the scene
+        // Find the filter data by name
+        foreach (var filter in jsonLoader.filterData.filters)
+        {
+            if (filter.displayName == filterDataName)
+            {
+                filterData = filter;
+                break;
+            }
+        }
+
+        if (filterData == null)
+        {
+            Debug.LogError("Filter data not found for: " + filterDataName);
+            enabled = false;
+            return;
+        }
+
         waterQualityParameters = FindObjectOfType<WaterQualityParameters>();
         if (waterQualityParameters == null)
         {
             Debug.LogError("WaterQualityParameters not found in the scene. Make sure it exists.");
+            enabled = false;
+            return;
         }
     }
 
@@ -41,46 +55,31 @@ public class FilterBehavior : MonoBehaviour
 
     private void ApplyEffectOnpH()
     {
-        if (filterData != null && waterQualityParameters != null)
-        {
-            float pHChangeRate = filterData.filters[0].pHChangeRate;
-            waterQualityParameters.AdjustpHLevel(pHChangeRate); // Adjust pH due to filter effect
-        }
+        float pHChangeRate = filterData.pHChangeRate; // Access pHChangeRate directly
+        waterQualityParameters.AdjustpHLevel(pHChangeRate);
     }
 
     private void ApplyEffectOnAmmonia()
     {
-        if (filterData != null && waterQualityParameters != null)
-        {
-            float ammoniaReduction = filterData.filters[0].ammoniaChangeRate;
-            waterQualityParameters.AdjustAmmoniaLevel(ammoniaReduction);
-        }
+        float ammoniaReduction = filterData.ammoniaChangeRate; // Access ammoniaChangeRate directly
+        waterQualityParameters.AdjustAmmoniaLevel(ammoniaReduction);
     }
 
     private void ApplyEffectOnNitrite()
     {
-        if (filterData != null && waterQualityParameters != null)
-        {
-            float nitriteChangeRate = filterData.filters[0].nitriteChangeRate;
-            waterQualityParameters.AdjustNitriteLevel(nitriteChangeRate);
-        }
+        float nitriteChangeRate = filterData.nitriteChangeRate; // Access nitriteChangeRate directly
+        waterQualityParameters.AdjustNitriteLevel(nitriteChangeRate);
     }
 
     private void ApplyEffectOnNitrate()
     {
-        if (filterData != null && waterQualityParameters != null)
-        {
-            float nitrateChangeRate = filterData.filters[0].nitrateChangeRate;
-            waterQualityParameters.AdjustNitrateLevel(nitrateChangeRate);
-        }
+        float nitrateChangeRate = filterData.nitrateChangeRate; // Access nitrateChangeRate directly
+        waterQualityParameters.AdjustNitrateLevel(nitrateChangeRate);
     }
 
     private void ApplyEffectOnOxygen()
     {
-        if (filterData != null && waterQualityParameters != null)
-        {
-            float oxygenChangeRate = filterData.filters[0].oxygenChangeRate;
-            waterQualityParameters.AdjustOxygenLevel(oxygenChangeRate);
-        }
+        float oxygenChangeRate = filterData.oxygenChangeRate; // Access oxygenChangeRate directly
+        waterQualityParameters.AdjustOxygenLevel(oxygenChangeRate);
     }
 }
