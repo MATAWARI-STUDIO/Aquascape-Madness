@@ -161,6 +161,8 @@ public class FilterInfoPanel : MonoBehaviour
         }
     }
 
+
+
     public void UpdateFilterInfo(Filter filter)
     {
         nameText.text = filter.displayName;
