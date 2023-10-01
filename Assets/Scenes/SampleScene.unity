@@ -5714,6 +5714,7 @@ MonoBehaviour:
   deathIndicator: {fileID: 0}
   wiltingIndicator: {fileID: 0}
   plantTraits: {fileID: 0}
+  lightConsumptionRate: 0.1
   nutrientConsumptionRate: 0.1
 --- !u!1 &108960825
 GameObject:
@@ -30140,7 +30141,7 @@ MonoBehaviour:
   yearText: {fileID: 921951844}
   weekText: {fileID: 1189221217}
   dayText: {fileID: 614534244}
-  timeScaleFactor: 6
+  timeScaleFactor: 2
 --- !u!4 &444272519
 Transform:
   m_ObjectHideFlags: 0
@@ -43068,7 +43069,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 685666506}
-  m_LocalRotation: {x: 0.16920157, y: 0.11275765, z: -0.01948969, w: 0.9789161}
+  m_LocalRotation: {x: 0.1692016, y: 0.11275634, z: -0.019489465, w: 0.9789162}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44702,7 +44703,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 708221335}
-  m_LocalRotation: {x: 0.20464896, y: 0.11197525, z: -0.023572735, w: 0.9721238}
+  m_LocalRotation: {x: 0.20464899, y: 0.11197392, z: -0.023572454, w: 0.972124}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -55013,7 +55014,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 913409100}
-  m_LocalRotation: {x: 0.1869327, y: 0.112385534, z: -0.021532074, w: 0.9756854}
+  m_LocalRotation: {x: 0.1869327, y: 0.11238419, z: -0.021531817, w: 0.9756856}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -56867,6 +56868,7 @@ MonoBehaviour:
   deathIndicator: {fileID: 0}
   wiltingIndicator: {fileID: 945429382}
   plantTraits: {fileID: 0}
+  lightConsumptionRate: 0.1
   nutrientConsumptionRate: 0.1
 --- !u!1 &948198593
 GameObject:
@@ -70491,46 +70493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waterQuality: {fileID: 1896361308}
   jsonLoader: {fileID: 1364189694}
-  allPlants:
-  - id: 
-    name: 
-    type: 
-    pH: []
-    ammonia_ppm: []
-    nitrite_ppm: []
-    nitrate_ppm: []
-    o2_production_mgphg: []
-    light_requirement: 
-    light_intensity_lux: 0
-    co2_needs_ppm: []
-    temperature_range_celsius: []
-    nitrateLevel: 0
-    price_usd: 0
-    plantSize: 0
-    growthRate: 0
-    nutrientReleaseRate: 0
-    oxygenConsumptionRate: 0
-    lightSpectrum: 
-    co2AbsorptionRate: 0
-    health: 0
-    stress: 0
-    interactions:
-      fish:
-        effectOnpH: 0
-        effectOnAmmonia: 0
-        effectOnNitrite: 0
-        effectOnNitrate: 0
-        effectOnCO2Production: 0
-    carbonate_hardness: []
-    general_hardness: []
-    description: 
-    nutrientUptakeRate: 0
-    herbivoreFoodAmount: 0
-    ammoniaEffect: 0
-    nitrateEffect: 0
-    pHEffect: 0
-    phosphorus_ppm: []
-    potassium_ppm: []
+  allPlants: []
 --- !u!1 &1235529290
 GameObject:
   m_ObjectHideFlags: 0
@@ -83786,7 +83749,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1514258102}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 61.9, y: 3.064, z: -1.63}
+  m_LocalPosition: {x: 61.9, y: 3.0178, z: -1.63}
   m_LocalScale: {x: 0.13231823, y: 0.093608655, z: 0.1258189}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -84220,6 +84183,7 @@ MonoBehaviour:
   deathIndicator: {fileID: 945429382}
   wiltingIndicator: {fileID: 945429382}
   plantTraits: {fileID: 1519242570}
+  lightConsumptionRate: 0.1
   nutrientConsumptionRate: 0.1
 --- !u!114 &1519242570
 MonoBehaviour:
@@ -84245,6 +84209,7 @@ MonoBehaviour:
   co2Level: 0
   growthRate: 0
   plantSize: 0
+  nutrientUptakeRate: 0
   nutritionValue: 0
   phosphorusLevel: 0
   potassiumLevel: 0
@@ -105414,6 +105379,7 @@ MonoBehaviour:
   deathIndicator: {fileID: 945429382}
   wiltingIndicator: {fileID: 1407510193}
   plantTraits: {fileID: 1832542596}
+  lightConsumptionRate: 0.1
   nutrientConsumptionRate: 0.1
 --- !u!136 &1832542587
 CapsuleCollider:
@@ -105489,6 +105455,7 @@ MonoBehaviour:
   co2Level: 0
   growthRate: 0
   plantSize: 0
+  nutrientUptakeRate: 0
   nutritionValue: 0
   phosphorusLevel: 0
   potassiumLevel: 0
@@ -135749,7 +135716,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115016507}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 61.11988, y: 3.534, z: -3.0455508}
+  m_LocalPosition: {x: 61.119884, y: 3.534, z: -3.0455518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -138708,8 +138675,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2650234582403667058}
-  m_LocalRotation: {x: 0.18693267, y: 0.112385556, z: -0.02153208, w: 0.9756854}
-  m_LocalPosition: {x: 61.11988, y: 3.534, z: -3.0455508}
+  m_LocalRotation: {x: 0.18693271, y: 0.112384215, z: -0.02153182, w: 0.9756856}
+  m_LocalPosition: {x: 61.119884, y: 3.534, z: -3.0455518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

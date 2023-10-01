@@ -30,7 +30,7 @@ public class SimulationManager : MonoBehaviour
             currentTimeOfLightCycle += Time.deltaTime / 86400.0f;
 
             waterQualityParameters.UpdateWaterParameters(); // Use the correct method to update water parameters
-            waterQualityParameters.UpdateNutrientLevels();
+            waterQualityParameters.UpdateNutrientLevels(Time.deltaTime);
 
             foreach (var fishBehavior in fishBehaviors)
             {
@@ -47,9 +47,6 @@ public class SimulationManager : MonoBehaviour
                 // Pass the arguments correctly to ApplyWaterEffects for each fish
                 fishBehavior.ApplyWaterEffects(fishData, pHValue, ammoniaValue, nitriteValue, nitrateValue, o2ProductionRate, currentTemperature);
             }
-
-
-
 
             foreach (var plantBehavior in plantBehaviors)
             {
@@ -72,6 +69,7 @@ public class SimulationManager : MonoBehaviour
             HandleGameEvents();
         }
     }
+
 
     public void StartSimulation()
     {

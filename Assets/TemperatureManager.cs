@@ -20,4 +20,9 @@ public class TemperatureManager : MonoBehaviour
     {
         return currentTemperature;
     }
+
+    public void SetTemperature(float value)
+    {
+        currentTemperature = value;
+    }
 }

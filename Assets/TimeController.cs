@@ -73,7 +73,7 @@ public class TimeController : MonoBehaviour
         {
             if (!isPaused)
             {
-                currentTime += Time.deltaTime * timeScale * 600.0f;
+                currentTime += Time.deltaTime * timeScale * 150.0f; // Further reduced to 150.0f
                 if (currentTime >= 86400f)
                 {
                     currentTime = 0f;
@@ -84,6 +84,7 @@ public class TimeController : MonoBehaviour
             yield return null;
         }
     }
+
 
     private void UpdateClockText(float timeInSeconds)
     {

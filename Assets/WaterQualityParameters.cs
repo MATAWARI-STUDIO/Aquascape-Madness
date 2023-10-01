@@ -13,9 +13,9 @@ public class WaterQualityParameters : MonoBehaviour
     public float minPhosphorusLevel = 0.0f;
     public float maxPhosphorusLevel = 1.0f;
     public float maxPotassiumLevel = 1.0f;
-    public float minPotassiumLevel = 1.0f;
+    public float minPotassiumLevel = 0.0f;
     public float maxCalciumLevel = 1.0f;
-    public float minCalciumLevel = 1.0f;
+    public float minCalciumLevel = 0.0f;
     public float bacteriaPopulation = 0.0f;
 
     [Header("Water Parameters")]
@@ -43,31 +43,32 @@ public class WaterQualityParameters : MonoBehaviour
         if (timeSinceLastUpdate >= UPDATE_INTERVAL)
         {
             UpdateWaterParameters();
-            UpdateNutrientLevels();
-            UpdateParameters();
+            UpdateNutrientLevels(Time.deltaTime);
+            UpdateParameters(Time.deltaTime);
             timeSinceLastUpdate = 0f;
         }
     }
 
-    public void UpdateParameters()
+
+    public void UpdateParameters(float deltaTime)
     {
-        SimulateCalciumChange();
-        SimulateToxinChange();
-        SimulateWasteChange();
-        SimulatepHChange();
+        SimulateParameterChange(ref calcium, minCalciumLevel, maxCalciumLevel, -0.02f, 0.02f);
+        SimulateParameterChange(ref toxinLevel, 0, 100, 0, 0.005f);
+        SimulateParameterChange(ref wasteLevel, 0, float.MaxValue, 0, -0.01f * Time.timeScale);
+        SimulatePHChange();
     }
 
     private void SimulateCalciumChange()
     {
-        float calciumChange = Random.Range(-0.1f, 0.1f) * Time.timeScale;
-        calcium += calciumChange;
+        float calciumChange = Random.Range(-0.02f, 0.02f); // reduced randomness
+        calcium += calciumChange * Time.deltaTime;
         calcium = Mathf.Clamp(calcium, minCalciumLevel, maxCalciumLevel);
     }
 
     private void SimulateToxinChange()
     {
-        float toxinIncreaseRate = 0.02f * Time.timeScale;
-        toxinLevel += toxinIncreaseRate;
+        float toxinIncreaseRate = 0.005f; // further reduced toxin increase
+        toxinLevel += toxinIncreaseRate * Time.deltaTime;
         toxinLevel = Mathf.Clamp(toxinLevel, 0, 100);
     }
 
@@ -78,19 +79,25 @@ public class WaterQualityParameters : MonoBehaviour
         wasteLevel = Mathf.Max(0, wasteLevel);
     }
 
-    private void SimulatepHChange()
+    private void SimulatePHChange()
     {
-        float pHChange = Random.Range(-0.05f, 0.05f) * Time.timeScale;
-        pH += pHChange;
-        pH = Mathf.Clamp(pH, 0, 14);
+        SimulateParameterChange(ref pH, 0, 14, -0.05f, 0.05f);
+        AdjustNutrientLevelsBasedOnPH();
+    }
+
+    private void SimulateParameterChange(ref float parameter, float min, float max, float minChange, float maxChange)
+    {
+        parameter += Random.Range(minChange, maxChange) * Time.deltaTime;
+        parameter = Mathf.Clamp(parameter, min, max);
     }
 
     public void UpdateWaterParameters()
     {
-        SimulateTemperatureChange();
-        SimulatePHChange();
-        SimulateAmmoniaChange();
-        SimulateOxygenChange();
+        SimulateParameterChange(ref temperature, 20f, 30f, -0.1f, 0.1f);
+        AdjustNutrientLevelsBasedOnTemperature();
+
+        SimulateParameterChange(ref ammoniaLevel, 0.0f, maxAmmoniaLevel, -0.02f, 0.02f);
+        SimulateParameterChange(ref oxygenLevel, minOxygenLevel, maxOxygenLevel, -0.02f, 0.02f);
         NitrateNaturalDecay();
     }
 
@@ -100,7 +107,7 @@ public class WaterQualityParameters : MonoBehaviour
         nitrate = Mathf.Clamp(nitrate, 0, maxNitrateLevel);
     }
 
-    public void UpdateNutrientLevels()
+    public void UpdateNutrientLevels(float deltaTime)
     {
         SimulateNutrientUptake();
         SimulateNutrientRelease();
@@ -108,31 +115,28 @@ public class WaterQualityParameters : MonoBehaviour
 
     private void SimulateTemperatureChange()
     {
-        temperature += Random.Range(-0.5f, 0.5f) * Time.timeScale;
+        temperature += Random.Range(-0.1f, 0.1f); // further reduced randomness
+        temperature = Mathf.Clamp(temperature, 20f, 30f); // keep temperature in a narrow range
         AdjustNutrientLevelsBasedOnTemperature();
-    }
-
-    private void SimulatePHChange()
-    {
-        pH += Random.Range(-0.05f, 0.05f) * Time.timeScale;
-        AdjustNutrientLevelsBasedOnPH();
     }
 
     private void SimulateAmmoniaChange()
     {
-        ammoniaLevel += Random.Range(-0.1f, 0.1f) * Time.timeScale;
+        ammoniaLevel += Random.Range(-0.02f, 0.02f); // further reduced randomness
         ammoniaLevel = Mathf.Clamp(ammoniaLevel, 0.0f, maxAmmoniaLevel);
     }
 
     private void SimulateOxygenChange()
     {
-        oxygenLevel += Random.Range(-0.1f, 0.1f) * Time.timeScale;
+        oxygenLevel += Random.Range(-0.02f, 0.02f); // further reduced randomness
         oxygenLevel = Mathf.Clamp(oxygenLevel, minOxygenLevel, maxOxygenLevel);
     }
-
     private void SimulateNutrientUptake()
     {
-        AdjustNutrientLevels(-waterBody.NutrientUptakeRate * Time.timeScale);
+        if (waterBody != null)
+        {
+            AdjustNutrientLevels(-waterBody.NutrientUptakeRate * Time.timeScale);
+        }
     }
 
     private void SimulateNutrientRelease()
@@ -228,35 +232,31 @@ public class WaterQualityParameters : MonoBehaviour
 
     public void AdjustNutrientLevels(float amount)
     {
-        float ammoniaReleasePercentage = 0.5f;
-        float nitrateReleasePercentage = 0.3f;
-        float phosphateReleasePercentage = 0.2f;
-
-        float ammoniaReleased = amount * ammoniaReleasePercentage;
-        float nitrateReleased = amount * nitrateReleasePercentage;
-        float phosphateReleased = amount * phosphateReleasePercentage;
-
-        ammoniaLevel += ammoniaReleased;
-        nitrate += nitrateReleased;
-        phosphorus += phosphateReleased;
-
-        ClampNutrientLevels();
+        DistributeNutrients(amount, 0.5f, 0.3f, 0.2f);
     }
+
+    private void DistributeNutrients(float amount, float ammoniaRatio, float nitrateRatio, float phosphateRatio)
+    {
+        ammoniaLevel += amount * ammoniaRatio;
+        nitrate += amount * nitrateRatio;
+        phosphorus += amount * phosphateRatio;
+
+        ammoniaLevel = Mathf.Clamp(ammoniaLevel, 0, maxAmmoniaLevel);
+        nitrate = Mathf.Clamp(nitrate, 0, maxNitrateLevel);
+        phosphorus = Mathf.Clamp(phosphorus, 0, maxPhosphorusLevel);
+    }
+
     public void AdjustWaterQualityBasedOnSubstrate(Substrate substrate)
     {
         pH += substrate.pH_effect;
         ammoniaLevel += substrate.interactions.water.effectOnAmmonia;
         ammoniaLevel = Mathf.Clamp(ammoniaLevel, 0, maxAmmoniaLevel);
-
-        // You can add other adjustments based on substrate here
     }
 
     public void AdjustNutrientLevelsBasedOnSubstrate(Substrate substrate)
     {
         nitrate += substrate.interactions.water.effectOnNitrate;
         nitrate = Mathf.Clamp(nitrate, 0, maxNitrateLevel);
-
-        // You can add other adjustments based on substrate here
     }
 
     public void AdjustpHLevel(float amount)
@@ -277,7 +277,6 @@ public class WaterQualityParameters : MonoBehaviour
         nitrite += changeAmount;
         nitrite = Mathf.Clamp(nitrite, minNitriteLevel, maxNitriteLevel);
     }
-
 
     public void AdjustNitrateLevel(float amount)
     {
@@ -338,6 +337,11 @@ public class WaterQualityParameters : MonoBehaviour
     {
         bacteriaPopulation += amount;
         ConvertAmmoniaAndNitriteToNitrate(amount);
+    }
+
+    public void SetAlgaePopulation(float value)
+    {
+        algaePopulation = value;
     }
 
     private void ConvertAmmoniaAndNitriteToNitrate(float amount)
@@ -540,18 +544,13 @@ public class WaterQualityParameters : MonoBehaviour
 
     public void ReduceNutrientLevels(float amount, float deltaTime)
     {
-        // Calculate nutrient decay rates based on environmental factors (temperature, pH, etc.)
         float temperatureFactor = CalculateTemperatureFactor();
         float pHFactor = CalculatepHFactor();
 
-        // Calculate the decay rate for nitrate (you can similarly calculate for other nutrients)
         float nitrateDecayRate = CalculateDecayRate(temperatureFactor, pHFactor);
-
-        // Reduce nitrate level based on the decay rate
         nitrate -= amount * deltaTime * nitrateDecayRate;
         nitrate = Mathf.Clamp(nitrate, 0, maxNitrateLevel);
 
-        // Similarly, calculate decay rates and update levels for nitrite, phosphorus, potassium, etc.
         float nitriteDecayRate = CalculateDecayRate(temperatureFactor, pHFactor);
         nitrite -= amount * deltaTime * nitriteDecayRate;
         nitrite = Mathf.Clamp(nitrite, 0, maxNitriteLevel);
@@ -564,52 +563,32 @@ public class WaterQualityParameters : MonoBehaviour
         potassium -= amount * deltaTime * potassiumDecayRate;
         potassium = Mathf.Clamp(potassium, 0, maxPotassiumLevel);
 
-        // You can continue to add more nutrients and update their levels here
-        // For example, if you have calcium as well:
-
         float calciumDecayRate = CalculateDecayRate(temperatureFactor, pHFactor);
         calcium -= amount * deltaTime * calciumDecayRate;
         calcium = Mathf.Clamp(calcium, 0, maxCalciumLevel);
-
-        // You can continue to add more nutrients and update their levels as needed
     }
 
     private float CalculateTemperatureFactor()
     {
-        // Simulated temperature range
         float minTemperature = 0.0f;
         float maxTemperature = 100.0f;
-
-        // Calculate the temperature factor based on the current temperature
         float temperatureFactor = Mathf.Clamp01((temperature - minTemperature) / (maxTemperature - minTemperature));
-
         return temperatureFactor;
     }
 
     private float CalculatepHFactor()
     {
-        // Simulated pH range
         float minpH = 0.0f;
         float maxpH = 14.0f;
-
-        // Calculate the pH factor based on the current pH level
         float pHFactor = Mathf.Clamp01((pH - minpH) / (maxpH - minpH));
-
         return pHFactor;
     }
 
     private float CalculateDecayRate(float temperatureFactor, float pHFactor)
     {
-        // Define the base decay rate
         float baseDecayRate = 0.01f;
-
-        // Adjust the decay rate based on temperature and pH factors
         float adjustedDecayRate = baseDecayRate * temperatureFactor * pHFactor;
-
-        // Ensure the adjusted decay rate is within a reasonable range
         adjustedDecayRate = Mathf.Clamp(adjustedDecayRate, 0.001f, 1.0f);
-
         return adjustedDecayRate;
     }
-
 }

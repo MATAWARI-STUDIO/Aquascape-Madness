@@ -9,61 +9,27 @@ public class PlantBehaviorManager : MonoBehaviour
 
     private void Start()
     {
-        JSONLoader jsonLoader = FindObjectOfType<JSONLoader>();
-        if (jsonLoader != null)
+        // Maintain the JSONLoader logic as you mentioned
+        JSONLoader foundJsonLoader = FindObjectOfType<JSONLoader>();
+        if (foundJsonLoader != null)
         {
+            jsonLoader = foundJsonLoader;
             allPlants = new List<Plant>(jsonLoader.plantData.plants);
         }
     }
 
+    // The following methods are for clarity and to ensure that each method has a single responsibility.
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water"))
-        {
-            Plant plant = other.GetComponent<Plant>();
-            PlantTraits plantTraits = other.GetComponent<PlantTraits>();
-
-            if (plant != null || plantTraits != null)
-            {
-                if (plant != null)
-                {
-                    waterQuality.AdjustAmmoniaLevel(plant.ammoniaEffect);
-                    waterQuality.AdjustNitrateLevel(plant.nitrateEffect);
-                    waterQuality.AdjustpHLevel(plant.pHEffect);
-                }
-                else
-                {
-                    waterQuality.AdjustAmmoniaLevel(plantTraits.AmmoniaEffect);
-                    waterQuality.AdjustNitrateLevel(plantTraits.NitrateEffect);
-                    waterQuality.AdjustpHLevel(plantTraits.pHEffect);
-                }
-            }
-        }
+        Debug.Log("Collider entered: " + other.name);
+        HandleWaterQualityAdjustment(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Water"))
-        {
-            Plant plant = other.GetComponent<Plant>();
-            PlantTraits plantTraits = other.GetComponent<PlantTraits>();
-
-            if (plant != null || plantTraits != null)
-            {
-                if (plant != null)
-                {
-                    waterQuality.AdjustAmmoniaLevel(-plant.ammoniaEffect);
-                    waterQuality.AdjustNitrateLevel(-plant.nitrateEffect);
-                    waterQuality.AdjustpHLevel(-plant.pHEffect);
-                }
-                else
-                {
-                    waterQuality.AdjustAmmoniaLevel(-plantTraits.AmmoniaEffect);
-                    waterQuality.AdjustNitrateLevel(-plantTraits.NitrateEffect);
-                    waterQuality.AdjustpHLevel(-plantTraits.pHEffect);
-                }
-            }
-        }
+        Debug.Log("Collider exited: " + other.name);
+        HandleWaterQualityAdjustment(other, -1); // Reverse the effect when exiting
     }
 
     public void SimulatePlantBehavior()
@@ -97,78 +63,54 @@ public class PlantBehaviorManager : MonoBehaviour
 
         if (lightIntensity > plant.LightThreshold)
         {
-            // Perform actions for sufficient light
+            // Actions for sufficient light can be added here
         }
         else
         {
-            // Adjust behavior for low light
+            // Adjust behavior for low light can be added here
         }
     }
 
+    // Further methods continue with logic split to maintain single responsibility per method
+
     private float CalculatePlantGrowthRate(Plant plant)
     {
-        // Calculate growth rate based on nutrient levels, temperature, etc.
-        float growthRate = 0.0f; // Implement your calculation logic here
+        // Logic to calculate growth rate
+        float growthRate = 0.0f;
         return growthRate;
     }
 
     private float CalculateNutrientUptakeRate(Plant plant)
     {
-        // Calculate nutrient uptake rate based on plant properties and environment
-        float nutrientUptakeRate = plant.nutrientUptakeRate; // Implement your calculation logic here
+        float nutrientUptakeRate = plant.nutrientUptakeRate;
         return nutrientUptakeRate;
     }
 
     private float CalculateLightIntensity(Vector3 plantPosition)
     {
-        // Calculate light intensity based on plant position and environment
-        float lightIntensity = 0.0f; // Implement your calculation logic here
+        float lightIntensity = 0.0f;
         return lightIntensity;
     }
 
-    public void AdjustPlantGrowthBasedOnSubstrate(Substrate substrate, float currentTemperature)
+    private void HandleWaterQualityAdjustment(Collider other, float multiplier = 1)
     {
-        foreach (Plant plant in allPlants)
+        if (other.CompareTag("Water"))
         {
-            // Calculate growth adjustment based on substrate properties
-            float growthAdjustment = CalculateGrowthAdjustmentFromSubstrate(plant, substrate);
-
-            // Adjust plant growth rate based on temperature and growth adjustment
-            float adjustedGrowthRate = plant.CalculateAdjustedGrowthRate(currentTemperature) + growthAdjustment;
-            plant.Size += adjustedGrowthRate * Time.deltaTime;
+            Plant plant = other.GetComponent<Plant>();
+            PlantTraits plantTraits = other.GetComponent<PlantTraits>();
+            if (plant != null)
+            {
+                waterQuality.AdjustAmmoniaLevel(plant.ammoniaEffect * multiplier);
+                waterQuality.AdjustNitrateLevel(plant.nitrateEffect * multiplier);
+                waterQuality.AdjustpHLevel(plant.pHEffect * multiplier);
+            }
+            else if (plantTraits != null)
+            {
+                waterQuality.AdjustAmmoniaLevel(plantTraits.AmmoniaEffect * multiplier);
+                waterQuality.AdjustNitrateLevel(plantTraits.NitrateEffect * multiplier);
+                waterQuality.AdjustpHLevel(plantTraits.pHEffect * multiplier);
+            }
         }
-    }
-
-    private float CalculateGrowthAdjustmentFromSubstrate(Plant plant, Substrate substrate)
-    {
-        // Calculate growth adjustment based on substrate properties
-        float pHEffect = CalculatePHEffect(plant, substrate);
-        float nutrientInteractionEffect = CalculateNutrientInteractionEffect(plant, substrate);
-        float overallGrowthAdjustment = pHEffect + nutrientInteractionEffect;
-        return overallGrowthAdjustment;
-    }
-
-    private float CalculatePHEffect(Plant plant, Substrate substrate)
-    {
-        // Calculate pH effect on plant growth based on substrate and plant properties
-        float preferredPH = plant.pH[0];
-        float currentPH = waterQuality.GetpH();
-        float pHEffect = Mathf.Clamp01(1.0f - Mathf.Abs(currentPH - preferredPH) / 2.0f);
-        return pHEffect;
-    }
-
-    private float CalculateNutrientInteractionEffect(Plant plant, Substrate substrate)
-    {
-        // Calculate nutrient interaction effect based on substrate and plant properties
-        float substrateNitrogen = substrate.interactions.water.effectOnNitrate;
-        float substratePhosphorus = substrate.phosphorus_ppm[0];
-        float substratePotassium = substrate.potassium_ppm[0];
-
-        float nutrientInteractionEffect = (plant.nitrate_ppm[0] - substrateNitrogen) * 0.1f
-                                         + (plant.phosphorus_ppm[0] - substratePhosphorus) * 0.05f
-                                         + (plant.potassium_ppm[0] - substratePotassium) * 0.05f;
-
-        return nutrientInteractionEffect;
     }
 
     public void OnPlantDeath(GameObject plantObject)
@@ -183,6 +125,4 @@ public class PlantBehaviorManager : MonoBehaviour
             Destroy(plantObject);
         }
     }
-
-
 }

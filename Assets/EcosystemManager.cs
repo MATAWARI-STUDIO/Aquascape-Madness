@@ -26,8 +26,8 @@ public class EcosystemManager : MonoBehaviour
 
     public float maxBacteriaDensityPerArea = 1000.0f;
 
-    private float warningCooldown = 10.0f;
-    private float lastWarningTime = -10.0f;
+    private float warningCooldown = 60.0f; // Increased cooldown to 60 seconds
+    private float lastWarningTime = -60.0f;
 
     private bool algaeWarningTriggered = false;
     private bool bacteriaWarningTriggered = false;
@@ -37,6 +37,10 @@ public class EcosystemManager : MonoBehaviour
         InitializeComponents();
         warningPanel.SetActive(false);
         closeButton.onClick.AddListener(OnCloseButtonClick);
+
+        temperatureManager.SetTemperature(25.0f);
+        waterQuality.SetBacteriaPopulation(100.0f);
+        waterQuality.SetAlgaePopulation(100.0f);
     }
 
     private void Update()
@@ -96,7 +100,7 @@ public class EcosystemManager : MonoBehaviour
         {
             waterQuality.AdjustWaterQualityBasedOnSubstrate(substrate);
         }
-        waterQuality.UpdateParameters();
+        waterQuality.UpdateParameters(0.5f);
     }
 
     private void SimulateNutrientCycling()
@@ -105,7 +109,7 @@ public class EcosystemManager : MonoBehaviour
         {
             waterQuality.AdjustNutrientLevelsBasedOnSubstrate(substrate);
         }
-        waterQuality.UpdateNutrientLevels();
+        waterQuality.UpdateNutrientLevels(0.5f);
     }
 
     private void SimulatePlantBehavior()
@@ -140,8 +144,6 @@ public class EcosystemManager : MonoBehaviour
         }
     }
 
-
-
     private void SimulateTemperatureEffects()
     {
         temperatureManager.SimulateTemperatureEffects();
@@ -172,7 +174,7 @@ public class EcosystemManager : MonoBehaviour
         }
 
         float ammoniaLevel = waterQuality.GetAmmoniaLevel();
-        if (ammoniaLevel >= waterQuality.maxAmmoniaLevel * 0.8f)
+        if (ammoniaLevel >= waterQuality.maxAmmoniaLevel * 0.9f)
         {
             TriggerEvent("Warning: Ammonia pollution detected! Ensure proper filtration and consider water changes.");
         }
@@ -196,8 +198,6 @@ public class EcosystemManager : MonoBehaviour
         }
     }
 
-
-    // EcosystemManager script
     private void SimulateBacterialEvents()
     {
         float currentPopulation = Mathf.Clamp(waterQuality.BacteriaPopulation, 0f, maxBacteriaPopulationThreshold);

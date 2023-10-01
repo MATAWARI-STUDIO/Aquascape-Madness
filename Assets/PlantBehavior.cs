@@ -11,14 +11,12 @@ public class PlantBehavior : MonoBehaviour
     private bool isCollidingWithWater = false;
     private bool isWilting = false;
     private float wiltingTimer = 0f;
-    private float lightConsumptionRate = 0.1f;
+
+    public float lightConsumptionRate = 0.1f;
     public float nutrientConsumptionRate = 0.1f;
-    private float health;
-    private float growthRate;
 
     private void Start()
     {
-        plantTraits = GetComponent<PlantTraits>();
         ValidateComponents();
     }
 
@@ -60,17 +58,25 @@ public class PlantBehavior : MonoBehaviour
 
     public void ApplyWaterEffects(float pHValue, float ammoniaValue, float nitrateValue)
     {
+        Debug.Log($"Incoming pHValue: {pHValue}, ammoniaValue: {ammoniaValue}, nitrateValue: {nitrateValue}");
+
         if (plantTraits != null)
         {
             float pHHealthEffect = CalculatePHEffect(pHValue);
             float ammoniaHealthEffect = CalculateAmmoniaEffect(ammoniaValue);
             float nitrateHealthEffect = CalculateNitrateEffect(nitrateValue);
 
-            plantTraits.health += pHHealthEffect + ammoniaHealthEffect + nitrateHealthEffect;
-            plantTraits.stress += pHHealthEffect + ammoniaHealthEffect + nitrateHealthEffect;
+            Debug.Log($"Calculated pHHealthEffect: {pHHealthEffect}, ammoniaHealthEffect: {ammoniaHealthEffect}, nitrateHealthEffect: {nitrateHealthEffect}");
 
-            plantTraits.health = Mathf.Clamp(plantTraits.health, 0.0f, 100.0f);
-            plantTraits.stress = Mathf.Clamp(plantTraits.stress, 0.0f, 100.0f);
+            plantTraits.pHEffect = pHHealthEffect;
+            plantTraits.AmmoniaEffect = ammoniaHealthEffect;
+            plantTraits.NitrateEffect = nitrateHealthEffect;
+
+            plantTraits.Health += pHHealthEffect + ammoniaHealthEffect + nitrateHealthEffect;
+            plantTraits.Stress += pHHealthEffect + ammoniaHealthEffect + nitrateHealthEffect;
+
+            plantTraits.Health = Mathf.Clamp(plantTraits.Health, 0.0f, 100.0f);
+            plantTraits.Stress = Mathf.Clamp(plantTraits.Stress, 0.0f, 100.0f);
         }
         else
         {
@@ -80,53 +86,35 @@ public class PlantBehavior : MonoBehaviour
 
     private float CalculatePHEffect(float pHValue)
     {
-        float optimalPHRangeMin = 6.5f;
-        float optimalPHRangeMax = 7.5f;
+        const float optimalPHRangeMin = 6.5f;
+        const float optimalPHRangeMax = 7.5f;
 
-        if (pHValue < optimalPHRangeMin || pHValue > optimalPHRangeMax)
-        {
-            return -5.0f;
-        }
-        return 0.0f;
+        return (pHValue < optimalPHRangeMin || pHValue > optimalPHRangeMax) ? -5.0f : 0.0f;
     }
 
     private float CalculateAmmoniaEffect(float ammoniaValue)
     {
-        float maxAmmoniaThreshold = 1.0f;
-
-        if (ammoniaValue > maxAmmoniaThreshold)
-        {
-            return -10.0f;
-        }
-        return 0.0f;
+        // Gradual effect for ammonia: The closer the ammonia value is to the threshold, the more negative effect it has.
+        const float maxAmmoniaThreshold = 1.0f;
+        return Mathf.Lerp(0, -10.0f, Mathf.Clamp01((ammoniaValue - 0.8f) / (maxAmmoniaThreshold - 0.8f)));
     }
 
     private float CalculateNitrateEffect(float nitrateValue)
     {
-        float maxNitrateThreshold = 1.0f;
-
-        if (nitrateValue > maxNitrateThreshold)
-        {
-            return -5.0f;
-        }
-        return 0.0f;
+        const float maxNitrateThreshold = 1.0f;
+        return (nitrateValue > maxNitrateThreshold) ? -5.0f : 0.0f;
     }
 
     private void Die()
     {
-        gameObject.SetActive(false);
-
         if (wiltingIndicator != null)
         {
             Instantiate(wiltingIndicator, transform.position, Quaternion.identity);
         }
-
+        gameObject.SetActive(false);
         Debug.Log($"Plant died: {plantName}");
-
-        // Add the following line to handle decomposition
-        DecompositionManager.Instance.HandleDecomposition(plantTraits.nutritionValue);
+        DecompositionManager.Instance.HandleDecomposition(plantTraits.NutritionValue);
     }
-
 
     public void StartWilting()
     {
@@ -161,13 +149,10 @@ public class PlantBehavior : MonoBehaviour
 
     public void UpdatePlantBehavior(float consumedLight, float consumedNutrient)
     {
-        // Logic to adjust the plant's behavior based on consumed light and nutrients.
-        // For example, you might adjust the plant's growth rate or health based on these values.
-        float lightEffect = consumedLight * 0.05f; // Example value, adjust as needed
-        float nutrientEffect = consumedNutrient * 0.1f; // Example value, adjust as needed
+        float lightEffect = consumedLight * lightConsumptionRate;
+        float nutrientEffect = consumedNutrient * nutrientConsumptionRate;
 
         plantTraits.UpdatePlantHealth(lightEffect + nutrientEffect);
-        plantTraits.UpdatePlantStress(-nutrientEffect); // Assuming nutrients reduce stress
+        plantTraits.UpdatePlantStress(-nutrientEffect);  // Assuming nutrients reduce stress
     }
-
 }
