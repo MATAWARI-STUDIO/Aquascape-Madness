@@ -88,6 +88,13 @@ public class PlantTraits : MonoBehaviour
         ApplyEnvironmentalEffects();
         health = Mathf.Clamp(health, 0.0f, 100.0f);
         stress = Mathf.Clamp(stress, 0.0f, 100.0f);
+
+        if (health <= 0.0f)
+        {
+            // The plant has died due to its health reaching zero.
+            // Implement any specific logic or events here related to the plant's death.
+            Debug.Log("The plant has died.");
+        }
     }
 
     private void ApplyEnvironmentalEffects()

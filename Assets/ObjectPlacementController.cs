@@ -17,9 +17,12 @@ public class ObjectPlacementController : MonoBehaviour
     public GameObject shopPanel;
     public List<Button> plantButtons = new List<Button>();
     public Collider[] tankColliders;
+    public JSONLoader jsonLoader;
     public static ObjectPlacementController instance;
 
     private GameObject spawnedObject;
+    private GameObject selectedPrefab;
+    private Vector3 spawnScale = Vector3.one;
     private bool isObjectSelected = false;
     private bool isLocked = false;
     private bool canInteract = false;
@@ -166,7 +169,6 @@ public class ObjectPlacementController : MonoBehaviour
         shopPanel.SetActive(false);
     }
 
-
     public void SpawnObject(Vector3 scale)
     {
         if (selectedPrefabIndex < 0 || selectedPrefabIndex >= objectPrefabs.Length)
@@ -198,6 +200,55 @@ public class ObjectPlacementController : MonoBehaviour
         originalMaterial = objectRenderer.material;
         objectRenderer.material = hoverMaterial;
 
+        PlantTraits traits = spawnedObject.GetComponent<PlantTraits>();
+        if (traits != null)
+        {
+            SetDefaultPlantTraits(traits);
+        }
+
         shopPanel.SetActive(false);
     }
+
+    private void SetDefaultPlantTraits(PlantTraits traits)
+    {
+        // Ensure jsonLoader is initialized.
+        if (jsonLoader == null)
+        {
+            Debug.LogError("jsonLoader is not set in ObjectPlacementController.");
+            return;
+        }
+
+        // Retrieve the default data for the plant based on its name.
+        Plant defaultData = jsonLoader.GetPlantDataByName(traits.gameObject.name);
+
+        // Check if defaultData is not null before accessing its properties.
+        if (defaultData != null)
+        {
+            // Assign environmental requirements from the JSON data to the plant traits.
+            traits.pHLevel = (defaultData.pH[0] + defaultData.pH[1]) / 2f;
+            traits.ammoniaLevel = (defaultData.ammonia_ppm[0] + defaultData.ammonia_ppm[1]) / 2f;
+            traits.nitriteLevel = (defaultData.nitrite_ppm[0] + defaultData.nitrite_ppm[1]) / 2f;
+            traits.nitrateLevel = (defaultData.nitrate_ppm[0] + defaultData.nitrate_ppm[1]) / 2f;
+            traits.o2Production = (defaultData.o2_production_mgphg[0] + defaultData.o2_production_mgphg[1]) / 2f;
+            traits.co2Level = (defaultData.co2_needs_ppm[0] + defaultData.co2_needs_ppm[1]) / 2f;
+
+            // Assign growth and metabolism traits from the JSON data.
+            traits.growthRate = defaultData.growthRate;
+            traits.plantSize = defaultData.plantSize;
+            traits.nutrientUptakeRate = defaultData.nutrientUptakeRate;
+
+            // Assign nutritional value and physical characteristics from the JSON data.
+            // traits.nutritionValue = defaultData.nutritionValue; // Commented this line as nutritionValue is not present in Plant class
+            traits.phosphorusLevel = (defaultData.phosphorus_ppm[0] + defaultData.phosphorus_ppm[1]) / 2f;
+            traits.potassiumLevel = (defaultData.potassium_ppm[0] + defaultData.potassium_ppm[1]) / 2f;
+
+            // You can continue to assign any other relevant traits from the JSON data.
+        }
+        else
+        {
+            Debug.LogWarning("No default data found for plant: " + traits.gameObject.name);
+        }
+    }
+
+
 }

@@ -78052,6 +78052,7 @@ MonoBehaviour:
   - {fileID: 689222646}
   - {fileID: 509955223}
   - {fileID: 674249184}
+  jsonLoader: {fileID: 1364189694}
 --- !u!4 &1383108563
 Transform:
   m_ObjectHideFlags: 0
@@ -113717,7 +113718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae8c76815d677640abf11d68bb59d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeStep: 1
+  timeStep: 0.5
   maxBacteriaPopulationThreshold: 5000
   waterBody: {fileID: 187717562}
   waterQuality: {fileID: 1896361308}
