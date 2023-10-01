@@ -30,6 +30,20 @@ public class PlantTraits : MonoBehaviour
 
     public float NutrientUptakeRate => nutrientUptakeRate;
 
+    public float Health
+    {
+        get { return health; }
+        set { health = value; }
+    }
+
+    public float Stress
+    {
+        get { return stress; }
+        set { stress = value; }
+    }
+
+    public float NutritionValue => nutritionValue;
+
     public float AmmoniaEffect
     {
         get { return _ammoniaEffect; }
