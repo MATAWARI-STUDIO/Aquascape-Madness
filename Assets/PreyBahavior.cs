@@ -7,6 +7,7 @@ public class PreyBehavior : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
     public float attackDamage = 10f; // Adjust as needed
+    public float nutritionValue = 50.0f;  // Added this line
 
     private void Start()
     {
@@ -21,6 +22,18 @@ public class PreyBehavior : MonoBehaviour
             // Perform predation
             PredatorPreyInteraction(predator);
         }
+    }
+
+    public float GetNutritionValue()
+    {
+        return nutritionValue;
+    }
+
+    public void GetConsumed()
+    {
+        // Handle the prey being eaten.
+        Debug.Log($"{name} has been eaten!");
+        Die();
     }
 
     private void PredatorPreyInteraction(PredatorBehavior predator)

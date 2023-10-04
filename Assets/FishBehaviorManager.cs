@@ -4,11 +4,16 @@ using System.Collections.Generic;
 public class FishBehaviorManager : MonoBehaviour
 {
     public WaterQualityParameters waterQualityParameters;
+    [SerializeField] private float herbivoreAmmoniaEffect = 0.05f;
+    [SerializeField] private float herbivoreNitrateEffect = 0.1f;
+    [SerializeField] private float predatorAmmoniaEffect = 0.1f;
+    [SerializeField] private float predatorNitrateEffect = 0.05f;
+
     private List<FishBehavior> fishBehaviors;
 
     private void Start()
     {
-        fishBehaviors = new List<FishBehavior>(FindObjectsOfType<FishBehavior>());
+        RefreshFishList();
     }
 
     private void Update()
@@ -28,6 +33,12 @@ public class FishBehaviorManager : MonoBehaviour
 
     private void AdjustWaterQuality()
     {
+        if (waterQualityParameters == null)
+        {
+            Debug.LogError("WaterQualityParameters not set!");
+            return;
+        }
+
         float totalAmmoniaEffect = 0.0f;
         float totalNitrateEffect = 0.0f;
 
@@ -35,17 +46,23 @@ public class FishBehaviorManager : MonoBehaviour
         {
             if (fishBehavior.fish.isHerbivorous)
             {
-                totalAmmoniaEffect += 0.05f; // Example value, adjust as needed
-                totalNitrateEffect += 0.1f; // Example value, adjust as needed
+                totalAmmoniaEffect += herbivoreAmmoniaEffect;
+                totalNitrateEffect += herbivoreNitrateEffect;
             }
             else if (fishBehavior.fish.predatorFoodAmount > 0)
             {
-                totalAmmoniaEffect += 0.1f; // Example value, adjust as needed
-                totalNitrateEffect += 0.05f; // Example value, adjust as needed
+                totalAmmoniaEffect += predatorAmmoniaEffect;
+                totalNitrateEffect += predatorNitrateEffect;
             }
         }
 
         waterQualityParameters.AdjustAmmoniaLevel(-totalAmmoniaEffect);
         waterQualityParameters.AdjustNitrateLevel(-totalNitrateEffect);
+    }
+
+
+    public void RefreshFishList()
+    {
+        fishBehaviors = new List<FishBehavior>(FindObjectsOfType<FishBehavior>());
     }
 }

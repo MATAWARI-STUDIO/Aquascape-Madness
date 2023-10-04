@@ -5,6 +5,7 @@ public class PredatorBehavior : MonoBehaviour
     public float maxHealth = 150f;
     public float currentHealth;
     public float attackDamage = 20f;
+    public float nutritionValue = 100.0f;  // Added this line
 
     private void Start()
     {
@@ -44,5 +45,12 @@ public class PredatorBehavior : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+    }
+
+    public void EatFish(FishBehavior fish)
+    {
+        // Increase the predator's nutrition value when it eats a fish.
+        nutritionValue += fish.nutritionValue;
+        Debug.Log($"{name} ate {fish.fish.name}!");
     }
 }

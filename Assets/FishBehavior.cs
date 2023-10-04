@@ -135,11 +135,30 @@ public class FishBehavior : MonoBehaviour
 
     public void PredatorPreyInteraction(PredatorBehavior predator)
     {
-        // Handle interactions with predators
+        // If the fish's health is below 30, it gets eaten by the predator.
+        if (health < 30)
+        {
+            predator.EatFish(this);
+            Die();
+        }
+        else
+        {
+            // The fish manages to escape. You can add more logic here if needed.
+            Debug.Log($"{fish.name} managed to escape from the predator!");
+        }
     }
 
     public void Predation(PreyBehavior prey)
     {
-        // Handle predation on prey
+        // Consume the prey and increase nutrition value.
+        nutritionValue += prey.GetNutritionValue();
+        prey.GetConsumed();
+
+        // If the prey had a significant nutrition value, the predator fish grows a bit.
+        if (prey.GetNutritionValue() > 20)
+        {
+            Grow();
+        }
     }
+
 }
