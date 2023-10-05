@@ -3,12 +3,14 @@ using UnityEngine;
 public class FishBehavior : MonoBehaviour
 {
     public Fish fish;
+    public FishData fishData;
     public WaterQualityParameters waterQualityParameters;
     public GameObject deadCreatureIndicator;
     public ResourcePool resourcePool;
-    public FishData fishData;
     public FishInfoPanel fishInfoPanel;
+    private JSONLoader jsonLoader;
 
+    public const float MAX_HEALTH = 150.0f;
     public float health = 100.0f;
     public float nutritionValue = 50.0f;
 
@@ -16,6 +18,8 @@ public class FishBehavior : MonoBehaviour
 
     private void Start()
     {
+        jsonLoader = FindObjectOfType<JSONLoader>();
+
         if (fish.isHerbivorous || fish.predatorFoodAmount > 0)
         {
             fishInfoPanel = FindObjectOfType<FishInfoPanel>();
@@ -33,10 +37,11 @@ public class FishBehavior : MonoBehaviour
             float o2ProductionRate = waterQualityParameters.GetCurrentOxygen();
             float currentTemperature = waterQualityParameters.GetTemperature();
 
-            // Pass the arguments correctly to ApplyWaterEffects on this instance
-            ApplyWaterEffects(fishData, pHValue, ammoniaValue, nitriteValue, nitrateValue, o2ProductionRate, currentTemperature);
-
+            ApplyWaterEffects(pHValue, ammoniaValue, nitriteValue, nitrateValue, o2ProductionRate, currentTemperature);
             ApplyBacterialEffects();
+
+            float lightIntensityFactor = CalculateLightIntensityFactor();
+            waterQualityParameters.ApplyFishEffect(fish, lightIntensityFactor);
 
             if (health <= 0)
             {
@@ -45,23 +50,33 @@ public class FishBehavior : MonoBehaviour
         }
     }
 
-
-    public void ApplyWaterEffects(FishData fishData, float pHValue, float ammoniaValue, float nitriteValue, float nitrateValue, float o2ProductionRate, float currentTemperature)
+    private float CalculateLightIntensityFactor()
     {
-        float ammoniaEffect = ammoniaValue * 0.05f; // Reduced the negative effect
-        float nitrateEffect = nitrateValue * 0.02f; // Reduced the negative effect
+        float totalIntensityFactor = 0f;
+        if (jsonLoader != null && jsonLoader.lightData != null)
+        {
+            foreach (var light in jsonLoader.lightData.lights)
+            {
+                totalIntensityFactor += light.intensity_adjustment_factor;
+            }
+        }
+        return totalIntensityFactor;
+    }
+
+    public void ApplyWaterEffects(float pHValue, float ammoniaValue, float nitriteValue, float nitrateValue, float o2ProductionRate, float currentTemperature)
+    {
+        float ammoniaEffect = ammoniaValue * 0.05f;
+        float nitrateEffect = nitrateValue * 0.02f;
 
         health -= ammoniaEffect;
         health -= nitrateEffect;
 
         if (fish.isHerbivorous)
         {
-            resourcePool.AdjustNutrientAvailability(-0.1f); // Increased nutrient consumption
-            waterQualityParameters.AdjustNitrateLevel(-0.05f); // Herbivorous fish consume nitrates directly
+            resourcePool.AdjustNutrientAvailability(-0.1f);
+            waterQualityParameters.AdjustNitrateLevel(-0.05f);
         }
     }
-
-
 
     private void ApplyBacterialEffects()
     {
@@ -76,7 +91,7 @@ public class FishBehavior : MonoBehaviour
     {
         if (health > 50 && nutritionValue > 25)
         {
-            health += 2.0f;
+            health = Mathf.Clamp(health + 2.0f, 0, MAX_HEALTH); // Clamp health
             transform.localScale += new Vector3(0.01f, 0.01f, 0.01f);
         }
     }
@@ -85,7 +100,7 @@ public class FishBehavior : MonoBehaviour
     {
         if (waterQualityParameters.AlgaePopulation > 10)
         {
-            nutritionValue += 5.0f;
+            nutritionValue += 3.0f; // Adjusted from 5.0f to 3.0f
             waterQualityParameters.AdjustAlgaePopulation(-5.0f);
         }
     }
@@ -110,10 +125,8 @@ public class FishBehavior : MonoBehaviour
             waterQualityParameters.AdjustBacteriaPopulation(50f);
         }
 
-        // Add the following line to handle decomposition
         DecompositionManager.Instance.HandleDecomposition(nutritionValue);
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -133,32 +146,49 @@ public class FishBehavior : MonoBehaviour
         }
     }
 
-    public void PredatorPreyInteraction(PredatorBehavior predator)
+    public void EatFish(FishBehavior prey)
     {
-        // If the fish's health is below 30, it gets eaten by the predator.
-        if (health < 30)
+        nutritionValue += prey.nutritionValue * 0.7f; // Fish only gains 70% of the nutrition from the prey
+        Debug.Log($"{name} ate {prey.fish.name}!");
+        prey.GetConsumed();
+    }
+
+    public void GetConsumed()
+    {
+        // The fish is consumed, so it's no longer active in the scene.
+        gameObject.SetActive(false);
+
+        // If there's a dead creature indicator, instantiate it at the fish's position.
+        if (deadCreatureIndicator != null)
         {
-            predator.EatFish(this);
-            Die();
+            Instantiate(deadCreatureIndicator, transform.position, Quaternion.identity);
         }
-        else
+
+        // Log that the fish has been consumed.
+        Debug.Log($"The fish {fish.name} has been consumed.");
+
+        // Adjust the environmental variables based on the type of fish.
+        if (fish.isHerbivorous)
         {
-            // The fish manages to escape. You can add more logic here if needed.
-            Debug.Log($"{fish.name} managed to escape from the predator!");
+            resourcePool.AdjustNutrientAvailability(nutritionValue);
         }
+        else if (fish.predatorFoodAmount > 0)
+        {
+            waterQualityParameters.AdjustBacteriaPopulation(50f);
+        }
+
+        // Handle the decomposition of the fish.
+        DecompositionManager.Instance.HandleDecomposition(nutritionValue);
     }
 
     public void Predation(PreyBehavior prey)
     {
-        // Consume the prey and increase nutrition value.
         nutritionValue += prey.GetNutritionValue();
         prey.GetConsumed();
 
-        // If the prey had a significant nutrition value, the predator fish grows a bit.
         if (prey.GetNutritionValue() > 20)
         {
             Grow();
         }
     }
-
 }

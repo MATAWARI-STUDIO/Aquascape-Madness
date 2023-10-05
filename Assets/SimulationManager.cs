@@ -45,7 +45,8 @@ public class SimulationManager : MonoBehaviour
                 FishData fishData = fishBehavior.fishData;
 
                 // Pass the arguments correctly to ApplyWaterEffects for each fish
-                fishBehavior.ApplyWaterEffects(fishData, pHValue, ammoniaValue, nitriteValue, nitrateValue, o2ProductionRate, currentTemperature);
+                fishBehavior.ApplyWaterEffects(pHValue, ammoniaValue, nitriteValue, nitrateValue, o2ProductionRate, currentTemperature);
+
             }
 
             foreach (var plantBehavior in plantBehaviors)

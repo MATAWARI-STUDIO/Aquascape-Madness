@@ -39,6 +39,7 @@ public class FishTraits : MonoBehaviour
     public float NitrateEffect { get; set; }
     public float pHEffect { get; set; }
 
+
     private void Start()
     {
         health = initialHealth;
@@ -49,25 +50,23 @@ public class FishTraits : MonoBehaviour
     private void Update()
     {
         ApplyEnvironmentalEffects();
-        health = Mathf.Clamp(health, 0.0f, 100.0f);
-        stress = Mathf.Clamp(stress, 0.0f, 100.0f);
-        hunger = Mathf.Clamp(hunger, 0.0f, 100.0f);
     }
 
     private void ApplyEnvironmentalEffects()
     {
         float ammoniaEffect = AmmoniaEffect * Time.deltaTime;
-        health += ammoniaEffect;
-        stress += ammoniaEffect;
+        UpdateFishHealth(ammoniaEffect);
+        UpdateFishStress(ammoniaEffect);
 
         float nitrateEffect = NitrateEffect * Time.deltaTime;
-        health += nitrateEffect;
-        stress += nitrateEffect;
+        UpdateFishHealth(nitrateEffect);
+        UpdateFishStress(nitrateEffect);
 
         float pHChange = pHEffect * Time.deltaTime;
-        health += pHChange;
-        stress += pHChange;
+        UpdateFishHealth(pHChange);
+        UpdateFishStress(pHChange);
     }
+
 
     public float GetHealth()
     {

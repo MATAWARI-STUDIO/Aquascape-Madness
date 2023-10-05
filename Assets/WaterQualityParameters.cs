@@ -591,4 +591,22 @@ public class WaterQualityParameters : MonoBehaviour
         adjustedDecayRate = Mathf.Clamp(adjustedDecayRate, 0.001f, 1.0f);
         return adjustedDecayRate;
     }
+
+    public void ApplyFishEffect(Fish fish, float lightIntensityFactor)
+    {
+        // Oxygen: Fish consume oxygen, but light intensity promotes photosynthesis which produces oxygen.
+        float oxygenConsumed = 0.01f; // Example value, you can adjust
+        float oxygenProduced = lightIntensityFactor * 0.05f; // Again, an example value
+        oxygenLevel = Mathf.Clamp(oxygenLevel - oxygenConsumed + oxygenProduced, minOxygenLevel, maxOxygenLevel);
+
+        // Ammonia: Fish produce waste which can increase the ammonia level in the water.
+        float ammoniaProduced = 0.02f; // Example value
+        ammoniaLevel = Mathf.Clamp(ammoniaLevel + ammoniaProduced, 0, maxAmmoniaLevel);
+
+        // pH: Fish waste can slightly acidify the water, but light intensity (through photosynthesis) can make it less acidic.
+        float pHDecreaseDueToWaste = 0.01f; // Example value
+        float pHIncreaseDueToPhotosynthesis = lightIntensityFactor * 0.02f; // Example value
+        pH = Mathf.Clamp(pH - pHDecreaseDueToWaste + pHIncreaseDueToPhotosynthesis, 0, 14);
+    }
+
 }

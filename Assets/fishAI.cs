@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FishAI : MonoBehaviour
@@ -22,6 +20,7 @@ public class FishAI : MonoBehaviour
     }
 
     private bool obstacleDetected = false;
+    private bool isFleeing = false;
     private float wanderPeriodStartTime;
     private Quaternion goalLookRotation;
     private Transform bodyTransform;
@@ -32,7 +31,7 @@ public class FishAI : MonoBehaviour
         if (tankCenterGoal == null)
         {
             Debug.LogError("The tankCenterGoal parameter is required but is null.");
-            UnityEditor.EditorApplication.isPlaying = false;
+            return;
         }
 
         bodyTransform = transform.Find("Body");
@@ -42,18 +41,49 @@ public class FishAI : MonoBehaviour
     private void Update()
     {
         Wiggle();
-        Wander();
-        AvoidObstacles();
 
-        // Slow down the fish if it's near the tank boundary
+        if (isFleeing)
+        {
+            Flee();
+        }
+        else
+        {
+            Wander();
+            AvoidObstacles();
+        }
+
+        // Check distance to tank center
         float distanceToCenter = Vector3.Distance(transform.position, tankCenterGoal.position);
-        float tankRadius = 5.0f;  // Replace with the actual radius of your tank
+        float tankRadius = 5.0f;
+
+        // If fish is approaching boundary
         if (distanceToCenter > tankRadius * 0.8f)
         {
-            swimSpeed *= 0.8f;
+            // Increase speed to get away from boundary faster
+            swimSpeed = swimSpeedMax;
+
+            // Set goal direction towards tank center
+            Vector3 goalDirection = tankCenterGoal.position - transform.position;
+            goalLookRotation = Quaternion.LookRotation(goalDirection);
+
+            // Adjust rotation immediately
+            transform.rotation = Quaternion.Slerp(transform.rotation, goalLookRotation, Time.deltaTime * maxTurnRateY);
         }
 
         UpdatePosition();
+    }
+
+
+    public void SetFleeState(bool state)
+    {
+        isFleeing = state;
+    }
+
+    void Flee()
+    {
+        swimSpeed = swimSpeedMax;
+        Vector3 fleeDirection = -swimDirection;
+        transform.position += fleeDirection * swimSpeed * Time.deltaTime;
     }
 
     void Wiggle()
@@ -114,7 +144,7 @@ public class FishAI : MonoBehaviour
 
     private void UpdatePosition()
     {
-        Vector3 position = transform.position + swimDirection * swimSpeed * Time.fixedDeltaTime;
+        Vector3 position = transform.position + swimDirection * swimSpeed * Time.deltaTime;
         transform.position = position;
     }
 }

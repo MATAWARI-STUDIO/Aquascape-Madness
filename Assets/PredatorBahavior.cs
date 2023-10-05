@@ -5,7 +5,7 @@ public class PredatorBehavior : MonoBehaviour
     public float maxHealth = 150f;
     public float currentHealth;
     public float attackDamage = 20f;
-    public float nutritionValue = 100.0f;  // Added this line
+    public float nutritionValue = 100.0f;
 
     private void Start()
     {
@@ -17,40 +17,41 @@ public class PredatorBehavior : MonoBehaviour
         PreyBehavior prey = collision.gameObject.GetComponent<PreyBehavior>();
         if (prey != null)
         {
-            // Perform predation based on randomness
-            float randomValue = Random.value;
-            if (randomValue < 0.5f || currentHealth == maxHealth)
+            AttackPrey(prey);
+        }
+    }
+
+    private void AttackPrey(PreyBehavior prey)
+    {
+        float attackChance = (currentHealth / maxHealth) * 0.5f + 0.5f;  // Healthier predator has a better chance
+        if (Random.value < attackChance)
+        {
+            prey.TakeDamage(attackDamage);
+            if (prey.currentHealth <= 0)
             {
-                PredatorPreyInteraction(prey);
+                EatPrey(prey);  // Changed the method name to better reflect the action
             }
         }
     }
 
-    private void PredatorPreyInteraction(PreyBehavior prey)
+    public void EatPrey(PreyBehavior prey)  // Changed the method name and parameter type
     {
-        FishBehavior fishBehavior = GetComponent<FishBehavior>();
-        if (fishBehavior != null)
+        nutritionValue += prey.GetNutritionValue();  // Using the GetNutritionValue method from PreyBehavior
+        Debug.Log($"{name} ate {prey.name}!");
+        prey.GetConsumed();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
-            // Handle predator-prey interaction through the FishBehavior
-            fishBehavior.PredatorPreyInteraction(this);
+            Die();
         }
     }
 
-    public void IncreaseHealth(PreyBehavior prey)
+    private void Die()
     {
-        float healthGained = prey.attackDamage * 0.5f;
-        currentHealth += healthGained;
-
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
-        }
-    }
-
-    public void EatFish(FishBehavior fish)
-    {
-        // Increase the predator's nutrition value when it eats a fish.
-        nutritionValue += fish.nutritionValue;
-        Debug.Log($"{name} ate {fish.fish.name}!");
+        Destroy(gameObject);
     }
 }
