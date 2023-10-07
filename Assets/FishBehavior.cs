@@ -2,6 +2,18 @@ using UnityEngine;
 
 public class FishBehavior : MonoBehaviour
 {
+    public LayerMask fishLayer;  // Define this in the Unity editor to specify the layer your fish objects are on
+
+    // Predator properties
+    private Transform targetPrey;
+    public float chaseSpeed = 0.5f;
+    public float chaseRadius = 5.0f;
+    public float eatDistance = 0.5f;
+
+    public bool isPrey;
+    public float fleeSpeed = 0.6f;
+    public float dangerRadius = 4.0f;
+
     public Fish fish;
     public FishData fishData;
     public WaterQualityParameters waterQualityParameters;
@@ -10,11 +22,14 @@ public class FishBehavior : MonoBehaviour
     public FishInfoPanel fishInfoPanel;
     private JSONLoader jsonLoader;
 
-    public const float MAX_HEALTH = 150.0f;
     public float health = 100.0f;
     public float nutritionValue = 50.0f;
 
     private bool isCollidingWithWater = false;
+
+    // Growth cooldown
+    private float lastGrowthTime = 0.0f;
+    private const float growthCooldown = 10.0f;
 
     private void Start()
     {
@@ -30,23 +45,54 @@ public class FishBehavior : MonoBehaviour
     {
         if (isCollidingWithWater)
         {
-            float pHValue = waterQualityParameters.GetpH();
-            float ammoniaValue = waterQualityParameters.GetAmmoniaLevel();
-            float nitriteValue = waterQualityParameters.GetNitriteLevel();
-            float nitrateValue = waterQualityParameters.GetNitrateLevel();
-            float o2ProductionRate = waterQualityParameters.GetCurrentOxygen();
-            float currentTemperature = waterQualityParameters.GetTemperature();
-
-            ApplyWaterEffects(pHValue, ammoniaValue, nitriteValue, nitrateValue, o2ProductionRate, currentTemperature);
+            ApplyWaterEffects();
             ApplyBacterialEffects();
 
-            float lightIntensityFactor = CalculateLightIntensityFactor();
-            waterQualityParameters.ApplyFishEffect(fish, lightIntensityFactor);
+            if (fish.predatorFoodAmount > 0)
+            {
+                ChasePrey();
+            }
+            if (isPrey)
+            {
+                FleeFromPredator();
+            }
 
             if (health <= 0)
             {
                 Die();
             }
+        }
+    }
+
+    private void ApplyWaterEffects()
+    {
+        float pHValue = waterQualityParameters.GetpH();
+        float ammoniaValue = waterQualityParameters.GetAmmoniaLevel();
+        float nitriteValue = waterQualityParameters.GetNitriteLevel();
+        float nitrateValue = waterQualityParameters.GetNitrateLevel();
+        float o2ProductionRate = waterQualityParameters.GetCurrentOxygen();
+        float currentTemperature = waterQualityParameters.GetTemperature();
+
+        float ammoniaEffect = ammoniaValue * 0.05f;
+        float nitrateEffect = nitrateValue * 0.02f;
+
+        health -= ammoniaEffect;
+        health -= nitrateEffect;
+
+        if (fish.isHerbivorous)
+        {
+            resourcePool.AdjustNutrientAvailability(-0.1f);
+            waterQualityParameters.AdjustNitrateLevel(-0.05f);
+        }
+    }
+
+
+    public void DecreaseHealth(float amount)
+    {
+        health -= amount;
+        if (health <= 0)
+        {
+            Die();
         }
     }
 
@@ -89,10 +135,14 @@ public class FishBehavior : MonoBehaviour
 
     public void Grow()
     {
-        if (health > 50 && nutritionValue > 25)
+        if (Time.time - lastGrowthTime > growthCooldown)
         {
-            health = Mathf.Clamp(health + 2.0f, 0, MAX_HEALTH); // Clamp health
-            transform.localScale += new Vector3(0.01f, 0.01f, 0.01f);
+            if (health > 50 && nutritionValue > 30)  // Made the nutrition condition a bit stricter
+            {
+                health += 1.0f;  // Reduced the rate of health growth
+                transform.localScale += new Vector3(0.005f, 0.005f, 0.005f);  // Reduced the physical growth rate
+                lastGrowthTime = Time.time;
+            }
         }
     }
 
@@ -100,7 +150,7 @@ public class FishBehavior : MonoBehaviour
     {
         if (waterQualityParameters.AlgaePopulation > 10)
         {
-            nutritionValue += 3.0f; // Adjusted from 5.0f to 3.0f
+            nutritionValue += 5.0f;
             waterQualityParameters.AdjustAlgaePopulation(-5.0f);
         }
     }
@@ -130,10 +180,23 @@ public class FishBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Water"))
+        if (((1 << other.gameObject.layer) & fishLayer) != 0)
         {
-            isCollidingWithWater = true;
-            Debug.Log("Creature immersed in water: " + fish.name);
+            if (fish.predatorFoodAmount > 0)
+            {
+                targetPrey = other.transform;
+
+                // Decrease prey's health
+                FishBehavior preyBehavior = other.gameObject.GetComponent<FishBehavior>();
+                if (preyBehavior != null)
+                {
+                    preyBehavior.DecreaseHealth(20);
+                }
+            }
+            else if (isPrey)
+            {
+                FleeFromPredator();
+            }
         }
     }
 
@@ -142,32 +205,27 @@ public class FishBehavior : MonoBehaviour
         if (other.CompareTag("Water"))
         {
             isCollidingWithWater = false;
-            Debug.Log("Creature removed from water: " + fish.name);
         }
     }
 
     public void EatFish(FishBehavior prey)
     {
-        nutritionValue += prey.nutritionValue * 0.7f; // Fish only gains 70% of the nutrition from the prey
+        nutritionValue += prey.nutritionValue;
         Debug.Log($"{name} ate {prey.fish.name}!");
         prey.GetConsumed();
     }
 
     public void GetConsumed()
     {
-        // The fish is consumed, so it's no longer active in the scene.
         gameObject.SetActive(false);
 
-        // If there's a dead creature indicator, instantiate it at the fish's position.
         if (deadCreatureIndicator != null)
         {
             Instantiate(deadCreatureIndicator, transform.position, Quaternion.identity);
         }
 
-        // Log that the fish has been consumed.
         Debug.Log($"The fish {fish.name} has been consumed.");
 
-        // Adjust the environmental variables based on the type of fish.
         if (fish.isHerbivorous)
         {
             resourcePool.AdjustNutrientAvailability(nutritionValue);
@@ -177,7 +235,6 @@ public class FishBehavior : MonoBehaviour
             waterQualityParameters.AdjustBacteriaPopulation(50f);
         }
 
-        // Handle the decomposition of the fish.
         DecompositionManager.Instance.HandleDecomposition(nutritionValue);
     }
 
@@ -191,4 +248,52 @@ public class FishBehavior : MonoBehaviour
             Grow();
         }
     }
+
+
+    private void ChasePrey()
+    {
+        if (targetPrey == null)
+        {
+            // Search for prey
+            Collider[] hits = Physics.OverlapSphere(transform.position, chaseRadius, fishLayer);
+            foreach (var hit in hits)
+            {
+                FishBehavior prey = hit.GetComponent<FishBehavior>();
+                if (prey && prey.isPrey)  // Ensure the target is actually a prey
+                {
+                    targetPrey = hit.transform;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // Chase the target prey
+            Vector3 directionToPrey = (targetPrey.position - transform.position).normalized;
+            transform.position += directionToPrey * chaseSpeed * Time.deltaTime;
+
+            float distanceToPrey = Vector3.Distance(transform.position, targetPrey.position);
+            if (distanceToPrey <= eatDistance)
+            {
+                EatFish(targetPrey.GetComponent<FishBehavior>());
+                targetPrey = null; // Reset target after consuming
+            }
+        }
+    }
+
+    private void FleeFromPredator()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, dangerRadius, fishLayer);
+        foreach (var hit in hits)
+        {
+            FishBehavior otherFish = hit.GetComponent<FishBehavior>();
+            if (otherFish && otherFish.fish.predatorFoodAmount > 0)
+            {
+                // Flee in the opposite direction of the predator
+                Vector3 directionAwayFromPredator = (transform.position - hit.transform.position).normalized;
+                transform.position += directionAwayFromPredator * fleeSpeed * Time.deltaTime;
+            }
+        }
+    }
+
 }
